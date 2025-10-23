@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using Tomlet;
 
 namespace SmallWhitelister4Noskin
 {
-    internal class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {
@@ -14,6 +15,7 @@ namespace SmallWhitelister4Noskin
             var configString = string.Empty;
             
             var config = new Config();
+            var data = new Data();
             Console.WriteLine(Environment.CurrentDirectory);
 
             if (File.Exists(Config.Path))
@@ -22,8 +24,13 @@ namespace SmallWhitelister4Noskin
                 config = TomletMain.To<Config>(configString);
             }
 
-            var arr1 = tomlTemplate.ToCharArray();
-            var arr2 = configString.ToCharArray();
+            if (File.Exists(Data.Path))
+            {
+                data = TomletMain.To<Data>(File.ReadAllText(Data.Path));
+            }
+
+            //var arr1 = tomlTemplate.ToCharArray();
+            //var arr2 = configString.ToCharArray();
 
             if (config.Characters.Length == 0 || configString == tomlTemplate)
             {
@@ -124,43 +131,101 @@ namespace SmallWhitelister4Noskin
             
             File.WriteAllText(Config.Path, TomletMain.TomlStringFrom(config));
 
-            var fullWhitelist = config.Characters.Where(character => character.SkinIds.Length == 0).ToArray();
+            var clone = data.WhitelistedCharacters;
+            foreach (var wlCharacter in clone)
+            {
+                var match = config.Characters.FirstOrDefault(character => character.Name == wlCharacter.Name);
+                if (match is null)
+                {
+                    if (wlCharacter.FullyWhitelist)
+                    {
+                        RestoreFromFullyWhitelisted(noskinWorkingPath, wlCharacter, data);
+                    }
+                    else
+                    {
+                        RestoreSkins(wlCharacter, noskinWorkingPath, data);
+                    }
+                    continue;
+                }
+
+                if (wlCharacter.FullyWhitelist && match.FullyWhitelist)
+                {
+                    continue;
+                }
+
+                if (wlCharacter.FullyWhitelist && !match.FullyWhitelist)
+                {
+                    RestoreFromFullyWhitelisted(noskinWorkingPath, wlCharacter, data);
+                }
+
+                if (!wlCharacter.FullyWhitelist && match.FullyWhitelist)
+                {
+                    RestoreSkins(wlCharacter, noskinWorkingPath, data);
+                }
+
+                if (!wlCharacter.FullyWhitelist && !match.FullyWhitelist)
+                {
+                    if (wlCharacter.SkinIds.Length == match.SkinIds.Length && !wlCharacter.SkinIds.Except(match.SkinIds).Any()) //equal
+                    {
+                        continue;
+                    }
+                    RestoreSkins(wlCharacter, noskinWorkingPath, data);
+                }
+            }
+            
+            var fullWhitelist = config.Characters.Where(character => character.FullyWhitelist).ToArray();
             var skinsToWhitelist = config.Characters.Except(fullWhitelist);
             foreach (var character in fullWhitelist)
             {
                 var path = $@"{noskinWorkingPath}\{character.Name}.wad.client";
-                if (!File.Exists(path))
+                var altPath = $@"{noskinWorkingPath}\{character.Name}.wad";
+                var wlPath = $@"{noskinWorkingPath}\{character.Name}.wad.client.whitelisted";
+                var wlAltPath = $@"{noskinWorkingPath}\{character.Name}.wad.whitelisted";
+                if (File.Exists(path))
+                {
+                    File.Move(path, $"{path}.whitelisted");
+                }
+                else if (File.Exists(altPath))
+                {
+                    File.Move(altPath, $"{altPath}.whitelisted");
+                }
+                else if (File.Exists(wlPath) || File.Exists(wlAltPath))
+                {
+                    Console.WriteLine($"{character.Name} already whitelisted");
+                    continue;
+                }
+                else 
                 {
                     Console.WriteLine($"No {character.Name} found. Skipping.");
                     continue;
                 }
 
-                File.Delete(path);
-                Console.WriteLine($"Whitelisted {character}");
+                data.WhitelistedCharacters.Add(character);
+                Console.WriteLine($"Whitelisted {character.Name}");
             }
             
+            var continuu = false;
             foreach (var character in skinsToWhitelist)
             {
-                if (!File.Exists($@"{noskinWorkingPath}\{character.Name}.wad.client"))
-                {
-                    Console.WriteLine($"No {character.Name} found. Skipping.");
-                    continue;
-                }
-
-                using(var pProcess = new Process())
-                {
-                    pProcess.StartInfo.FileName = $@"{cslolPath}\cslol-tools\wad-extract.exe";
-                    pProcess.StartInfo.Arguments = $@"{noskinWorkingPath}\{character.Name}.wad.client";
-                    pProcess.StartInfo.UseShellExecute = false;
-                    pProcess.StartInfo.CreateNoWindow = false;
-                    pProcess.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                    pProcess.Start();
-                    pProcess.WaitForExit();
-                }
                 var path = $@"{noskinWorkingPath}\{character.Name}.wad.client";
                 if (File.Exists(path))
                 {
+                    using(var pProcess = new Process())
+                    {
+                        pProcess.StartInfo.FileName = $@"{cslolPath}\cslol-tools\wad-extract.exe";
+                        pProcess.StartInfo.Arguments = $@"{noskinWorkingPath}\{character.Name}.wad.client";
+                        pProcess.StartInfo.UseShellExecute = false;
+                        pProcess.StartInfo.CreateNoWindow = false;
+                        pProcess.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                        pProcess.Start();
+                        pProcess.WaitForExit();
+                    }
                     File.Delete(path);
+                }
+                else if (!Directory.Exists($@"{noskinWorkingPath}\{character.Name}.wad"))
+                {
+                    Console.WriteLine($"No {character.Name} found. Skipping.");
+                    continue;
                 }
 
                 foreach (var skin in character.SkinIds)
@@ -169,21 +234,76 @@ namespace SmallWhitelister4Noskin
                                  $@"{noskinWorkingPath}\{character.Name}.wad\data\characters"))
                     {
                         var path1 = $@"{characterPath}\skins\skin{skin}.bin";
-                        if (!Directory.Exists(path1))
+                        var wlPath1 = $@"{characterPath}\skins\skin{skin}.bin.whitelisted";
+                        if (File.Exists(wlPath1))
+                        {
+                            Console.WriteLine($"{character.Name} already whitelisted");
+                            continuu = true;
+                            break;
+                        }
+                        if (!File.Exists(path1))
                         {
                             Console.WriteLine($"No skin{skin}.bin for {character.Name} found. Skipping.");
                             continue;
                         }
 
-                        File.Delete(path1);
+                        File.Move(path1, $"{path1}.whitelisted");
                         Console.WriteLine($"Whitelisted skin{skin}.bin for {character.Name}");
                     }
+                    if(continuu) break;
                 }
+                if(continuu) continue;
+                data.WhitelistedCharacters.Add(character);
             }
+            File.WriteAllText(Data.Path, TomletMain.TomlStringFrom(data));
 
             Console.WriteLine("Done");
 
             Console.ReadKey();
+        }
+
+        private static void RestoreSkins(Character wlCharacter, string noskinWorkingPath, Data data)
+        {
+            foreach (var skin in wlCharacter.SkinIds)
+            {
+                foreach (var characterPath in Directory.GetDirectories(
+                             $@"{noskinWorkingPath}\{wlCharacter.Name}.wad\data\characters"))
+                {
+                    var path = $@"{characterPath}\skins\skin{skin}.bin.whitelisted";
+                    if (!File.Exists(path))
+                    {
+                        Console.WriteLine($"No skin{skin}.bin for {wlCharacter.Name} found for restore. Skipping.");
+                        continue;
+                    }
+
+                    File.Move(path, path.Replace(".whitelisted", string.Empty));
+                    Console.WriteLine($"Restored skin{skin}.bin for {wlCharacter.Name}");
+                }
+            }
+
+            data.WhitelistedCharacters.Remove(wlCharacter);
+        }
+
+        private static void RestoreFromFullyWhitelisted(string noskinWorkingPath, Character wlCharacter, Data data)
+        {
+            var path = $@"{noskinWorkingPath}\{wlCharacter.Name}.wad.whitelisted";
+            var altPath = $@"{noskinWorkingPath}\{wlCharacter.Name}.wad.client.whitelisted";
+            if (File.Exists(path))
+            {
+                File.Move(path, path.Replace(".whitelisted", string.Empty));
+            }
+            else if (File.Exists(altPath))
+            {
+                File.Move(altPath, altPath.Replace(".whitelisted", string.Empty));
+            }
+            else
+            {
+                Console.WriteLine($"No {wlCharacter.Name} found for restore. Skipping.");
+                return;
+            }
+
+            data.WhitelistedCharacters.Remove(wlCharacter);
+            Console.WriteLine($"Restored {wlCharacter.Name}");
         }
     }
 }
