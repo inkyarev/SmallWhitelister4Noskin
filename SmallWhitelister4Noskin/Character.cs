@@ -9,7 +9,7 @@ namespace SmallWhitelister4Noskin
     {
         public Character(string name = "", bool fullyWhitelist = false, int[] skinIds = null)
         {
-            Name = name;
+            Name = Capitalize(name.ToLower());
             FullyWhitelist = fullyWhitelist;
             SkinIds = skinIds ?? Array.Empty<int>();
         }
@@ -46,5 +46,15 @@ namespace SmallWhitelister4Noskin
                 return hashCode;
             }
         }
+        private string Capitalize(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            return char.ToUpper(input[0]) + input.Substring(1);
+        }
+
     }
 }
