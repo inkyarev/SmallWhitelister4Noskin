@@ -398,3 +398,32 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+/obj/Debug/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/obj/Release/.NETFramework,Version=v4.8.AssemblyAttributes.cs
+/obj/Debug/Costura/028E9832F421F11F9497C610F1734E0F3D868037.costura.costura.dll.compressed.compressed
+/obj/Release/Costura/028E9832F421F11F9497C610F1734E0F3D868037.costura.costura.dll.compressed.compressed
+/obj/Debug/Costura/806F4C19B2D7FD9E3B836269EC07647019A29E95.costura.costura.pdb.compressed.compressed
+/obj/Release/Costura/806F4C19B2D7FD9E3B836269EC07647019A29E95.costura.costura.pdb.compressed.compressed
+/bin/Debug/config.toml
+/obj/Debug/Costura/FBC95B68B3BF6DA56D54EF8A07C7444326B6AB64.costura.tomlet.dll.compressed.compressed
+/obj/Release/Costura/FBC95B68B3BF6DA56D54EF8A07C7444326B6AB64.costura.tomlet.dll.compressed.compressed
+/FodyWeavers.xsd
+/SmallWhitelister4Noskin.csproj
+/obj/Debug/SmallWhitelister4Noskin.csproj.AssemblyReference.cache
+/obj/Release/SmallWhitelister4Noskin.csproj.AssemblyReference.cache
+/obj/Debug/SmallWhitelister4Noskin.csproj.CoreCompileInputs.cache
+/obj/Release/SmallWhitelister4Noskin.csproj.CoreCompileInputs.cache
+/obj/Debug/SmallWhitelister4Noskin.csproj.FileListAbsolute.txt
+/obj/Release/SmallWhitelister4Noskin.csproj.FileListAbsolute.txt
+/obj/Debug/SmallWhitelister4Noskin.csproj.Fody.CopyLocal.cache
+/obj/Release/SmallWhitelister4Noskin.csproj.Fody.CopyLocal.cache
+/obj/Debug/SmallWhitelister4Noskin.csproj.Fody.RuntimeCopyLocal.cache
+/obj/Release/SmallWhitelister4Noskin.csproj.Fody.RuntimeCopyLocal.cache
+/bin/Debug/SmallWhitelister4Noskin.exe
+/bin/Release/SmallWhitelister4Noskin.exe
+/obj/Debug/SmallWhitelister4Noskin.exe
+/obj/Release/SmallWhitelister4Noskin.exe
+/bin/Debug/SmallWhitelister4Noskin.pdb
+/bin/Release/SmallWhitelister4Noskin.pdb
+/obj/Debug/SmallWhitelister4Noskin.pdb
+/obj/Release/SmallWhitelister4Noskin.pdb
