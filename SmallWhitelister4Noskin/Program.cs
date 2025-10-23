@@ -11,7 +11,7 @@ namespace SmallWhitelister4Noskin
     {
         public static void Main(string[] args)
         {
-            const string tomlTemplate = "# Path to Noskin mod by Moga\r\nNoskinPath = ''\r\n\r\n[[Characters]]\r\nName = \"Yunara\"\r\n# Refer to https://martynasxs.dev/skindb for skin ids. Leave empty if you want to whitelist the entire character\r\nSkinsIds = [ 2, 3, 4, 5, 6, 7, ]";
+            const string tomlTemplate = "# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Alistar\"\nFullyWhitelist = false\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ 1,2,3 ]";
             var configString = string.Empty;
             
             var config = new Config();
@@ -28,8 +28,8 @@ namespace SmallWhitelister4Noskin
                 data = TomletMain.To<Data>(File.ReadAllText(Data.Path));
             }
 
-            //var arr1 = tomlTemplate.ToCharArray();
-            //var arr2 = configString.ToCharArray();
+            var arr1 = tomlTemplate.ToCharArray();
+            var arr2 = configString.ToCharArray();
 
             if (config.Characters.Length == 0 || configString == tomlTemplate)
             {
@@ -225,6 +225,8 @@ namespace SmallWhitelister4Noskin
             var continuu = false;
             foreach (var character in skinsToWhitelist)
             {
+                if(character.SkinIds.Length == 0) continue;
+                
                 var path = $@"{noskinWorkingPath}\{character.Name}.wad.client";
                 if (File.Exists(path))
                 {
