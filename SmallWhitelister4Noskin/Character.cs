@@ -10,13 +10,14 @@ namespace SmallWhitelister4Noskin
         public Character(string name = "", bool fullyWhitelist = false, int[] skinIds = null)
         {
             Name = name;
+            FullyWhitelist = fullyWhitelist;
             SkinIds = skinIds ?? Array.Empty<int>();
         }
         public string Name { get; }
         
         public bool FullyWhitelist { get; }
 
-        [TomlPrecedingComment("Refer to https://martynasxs.dev/skindb for skin ids. Leave empty if you want to whitelist the entire character")]
+        [TomlPrecedingComment("Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored")]
         public int[] SkinIds { get; }
 
         public override bool Equals(object obj)
@@ -44,21 +45,6 @@ namespace SmallWhitelister4Noskin
                 }
                 return hashCode;
             }
-        }
-    }
-    
-    class CharacterComparer : IEqualityComparer<Character>
-    {
-        public bool Equals(Character x, Character y)
-        {
-            if (x == null && y == null) return true;
-            if (x == null || y == null) return false;
-            return x.Name == y.Name;
-        }
-
-        public int GetHashCode(Character obj)
-        {
-            return obj.Name.GetHashCode();
         }
     }
 }

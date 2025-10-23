@@ -16,7 +16,6 @@ namespace SmallWhitelister4Noskin
             
             var config = new Config();
             var data = new Data();
-            Console.WriteLine(Environment.CurrentDirectory);
 
             if (File.Exists(Config.Path))
             {
@@ -119,7 +118,7 @@ namespace SmallWhitelister4Noskin
                 {
                     Console.WriteLine("CsLoL is being used by another program");
                     Console.ReadKey();
-                    return;
+                    Environment.Exit(5);
                 }
                 config.NoskinPath = $@"{installedPath}\1{noskinName}";
                 noskinWorkingPath = $@"{installedPath}\1{noskinName}\WAD";
@@ -131,7 +130,8 @@ namespace SmallWhitelister4Noskin
             
             File.WriteAllText(Config.Path, TomletMain.TomlStringFrom(config));
 
-            var clone = data.WhitelistedCharacters;
+            var clone = new Character [data.WhitelistedCharacters.Count];
+            data.WhitelistedCharacters.CopyTo(clone);
             foreach (var wlCharacter in clone)
             {
                 var match = config.Characters.FirstOrDefault(character => character.Name == wlCharacter.Name);
@@ -183,13 +183,31 @@ namespace SmallWhitelister4Noskin
                 var wlAltPath = $@"{noskinWorkingPath}\{character.Name}.wad.whitelisted";
                 if (File.Exists(path))
                 {
-                    File.Move(path, $"{path}.whitelisted");
+                    try
+                    {
+                        File.Move(path, $"{path}.whitelisted");
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Console.WriteLine("CsLoL is being used by another program");
+                        Console.ReadKey();
+                        Environment.Exit(5);
+                    }
                 }
-                else if (File.Exists(altPath))
+                else if (Directory.Exists(altPath))
                 {
-                    File.Move(altPath, $"{altPath}.whitelisted");
+                    try
+                    {
+                        Directory.Move(altPath, $"{altPath}.whitelisted");
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Console.WriteLine("CsLoL is being used by another program");
+                        Console.ReadKey();
+                        Environment.Exit(5);
+                    }
                 }
-                else if (File.Exists(wlPath) || File.Exists(wlAltPath))
+                else if (File.Exists(wlPath) || Directory.Exists(wlAltPath))
                 {
                     Console.WriteLine($"{character.Name} already whitelisted");
                     continue;
@@ -247,7 +265,16 @@ namespace SmallWhitelister4Noskin
                             continue;
                         }
 
-                        File.Move(path1, $"{path1}.whitelisted");
+                        try
+                        {
+                            File.Move(path1, $"{path1}.whitelisted");
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            Console.WriteLine("CsLoL is being used by another program");
+                            Console.ReadKey();
+                            Environment.Exit(5);
+                        }
                         Console.WriteLine($"Whitelisted skin{skin}.bin for {character.Name}");
                     }
                     if(continuu) break;
@@ -276,7 +303,17 @@ namespace SmallWhitelister4Noskin
                         continue;
                     }
 
-                    File.Move(path, path.Replace(".whitelisted", string.Empty));
+                    try
+                    {
+                        File.Move(path, path.Replace(".whitelisted", string.Empty));
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Console.WriteLine("CsLoL is being used by another program");
+                        Console.ReadKey();
+                        Environment.Exit(5);
+                    }
+                    
                     Console.WriteLine($"Restored skin{skin}.bin for {wlCharacter.Name}");
                 }
             }
@@ -288,13 +325,31 @@ namespace SmallWhitelister4Noskin
         {
             var path = $@"{noskinWorkingPath}\{wlCharacter.Name}.wad.whitelisted";
             var altPath = $@"{noskinWorkingPath}\{wlCharacter.Name}.wad.client.whitelisted";
-            if (File.Exists(path))
+            if (Directory.Exists(path))
             {
-                File.Move(path, path.Replace(".whitelisted", string.Empty));
+                try
+                {
+                    Directory.Move(path, path.Replace(".whitelisted", string.Empty));
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    Console.WriteLine("CsLoL is being used by another program");
+                    Console.ReadKey();
+                    Environment.Exit(5);
+                }
             }
             else if (File.Exists(altPath))
             {
-                File.Move(altPath, altPath.Replace(".whitelisted", string.Empty));
+                try
+                {
+                    File.Move(altPath, altPath.Replace(".whitelisted", string.Empty));
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    Console.WriteLine("CsLoL is being used by another program");
+                    Console.ReadKey();
+                    Environment.Exit(5);
+                }
             }
             else
             {
