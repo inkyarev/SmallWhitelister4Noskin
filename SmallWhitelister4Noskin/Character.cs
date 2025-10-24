@@ -5,6 +5,7 @@ using Tomlet.Attributes;
 
 namespace SmallWhitelister4Noskin
 {
+    [TomlDoNotInlineObject]
     public class Character
     {
         public Character(string name = "", bool fullyWhitelist = false, int[] skinIds = null)
@@ -14,10 +15,7 @@ namespace SmallWhitelister4Noskin
             SkinIds = skinIds ?? Array.Empty<int>();
         }
         public string Name { get; }
-        
         public bool FullyWhitelist { get; }
-
-        [TomlPrecedingComment("Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored")]
         public int[] SkinIds { get; }
 
         public override bool Equals(object obj)
@@ -46,7 +44,7 @@ namespace SmallWhitelister4Noskin
                 return hashCode;
             }
         }
-        private string Capitalize(string input)
+        private static string Capitalize(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
@@ -55,6 +53,5 @@ namespace SmallWhitelister4Noskin
 
             return char.ToUpper(input[0]) + input.Substring(1);
         }
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,7 +13,7 @@ namespace SmallWhitelister4Noskin
         public static void Main(string[] args)
         {
             const string constNoskinName = "$noskin";
-            const string tomlTemplate = "# Path to Noskin mod by Moga\nNoskinPath = ''\n\n# Example on how to add characters\n[[Characters]]\nName = \"Alistar\"\nFullyWhitelist = false\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ 1,2,3 ]\n[[Characters]]\nName = \"Yunara\"\nFullyWhitelist = true\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ ]";
+            const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids. \n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Aurora\"\nFullyWhitelist = true\nSkinIds = [ 4, 5, 6, 7, ]\n\n[[Characters]]\nName = \"Viego\"\nFullyWhitelist = true\nSkinIds = [ ]\n\n";
 
             #region Process files i.e. config
             var configString = string.Empty;
@@ -67,11 +66,14 @@ namespace SmallWhitelister4Noskin
 
             try
             {
-                Directory.Move(config.NoskinPath, $@"{installedPath}\{noskinName}");
+                if (config.NoskinPath != $@"{installedPath}\{noskinName}")
+                {
+                    Directory.Move(config.NoskinPath, $@"{installedPath}\{noskinName}");
+                }
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine("CsLoL is being used by another program");
+                Console.WriteLine("CsLoL directory is being used by another program");
                 Console.ReadKey();
                 Environment.Exit(5);
             }
@@ -145,7 +147,7 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        Console.WriteLine("CsLoL is being used by another program");
+                        Console.WriteLine("CsLoL directory is being used by another program");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
@@ -158,7 +160,7 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        Console.WriteLine("CsLoL is being used by another program");
+                        Console.WriteLine("CsLoL directory is being used by another program");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
@@ -254,7 +256,7 @@ namespace SmallWhitelister4Noskin
                         }
                         catch (UnauthorizedAccessException)
                         {
-                            Console.WriteLine("CsLoL is being used by another program");
+                            Console.WriteLine("CsLoL directory is being used by another program");
                             Console.ReadKey();
                             Environment.Exit(5);
                         }
@@ -304,7 +306,7 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        Console.WriteLine("CsLoL is being used by another program");
+                        Console.WriteLine("CsLoL directory is being used by another program");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
@@ -333,7 +335,7 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    Console.WriteLine("CsLoL is being used by another program");
+                    Console.WriteLine("CsLoL directory is being used by another program");
                     Console.ReadKey();
                     Environment.Exit(5);
                 }
@@ -346,7 +348,7 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    Console.WriteLine("CsLoL is being used by another program");
+                    Console.WriteLine("CsLoL directory is being used by another program");
                     Console.ReadKey();
                     Environment.Exit(5);
                 }
