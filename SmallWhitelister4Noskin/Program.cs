@@ -71,7 +71,7 @@ namespace SmallWhitelister4Noskin
                     Directory.Move(config.NoskinPath, $@"{installedPath}\{noskinName}");
                 }
             }
-            catch (UnauthorizedAccessException)
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
             {
                 Console.WriteLine("CsLoL directory is being used by another program");
                 Console.ReadKey();
@@ -145,7 +145,7 @@ namespace SmallWhitelister4Noskin
                     {
                         File.Move(path, $"{path}.whitelisted");
                     }
-                    catch (UnauthorizedAccessException)
+                    catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
                         Console.WriteLine("CsLoL directory is being used by another program");
                         Console.ReadKey();
@@ -158,7 +158,7 @@ namespace SmallWhitelister4Noskin
                     {
                         Directory.Move(altPath, $"{altPath}.whitelisted");
                     }
-                    catch (UnauthorizedAccessException)
+                    catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
                         Console.WriteLine("CsLoL directory is being used by another program");
                         Console.ReadKey();
@@ -254,7 +254,7 @@ namespace SmallWhitelister4Noskin
                         {
                             File.Move(path1, $"{path1}.whitelisted");
                         }
-                        catch (UnauthorizedAccessException)
+                        catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                         {
                             Console.WriteLine("CsLoL directory is being used by another program");
                             Console.ReadKey();
@@ -304,7 +304,7 @@ namespace SmallWhitelister4Noskin
                     {
                         File.Move(path, path.Replace(".whitelisted", string.Empty));
                     }
-                    catch (UnauthorizedAccessException)
+                    catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
                         Console.WriteLine("CsLoL directory is being used by another program");
                         Console.ReadKey();
@@ -333,7 +333,7 @@ namespace SmallWhitelister4Noskin
                 {
                     Directory.Move(path, path.Replace(".whitelisted", string.Empty));
                 }
-                catch (UnauthorizedAccessException)
+                catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
                     Console.WriteLine("CsLoL directory is being used by another program");
                     Console.ReadKey();
@@ -346,7 +346,7 @@ namespace SmallWhitelister4Noskin
                 {
                     File.Move(altPath, altPath.Replace(".whitelisted", string.Empty));
                 }
-                catch (UnauthorizedAccessException)
+                catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
                     Console.WriteLine("CsLoL directory is being used by another program");
                     Console.ReadKey();
