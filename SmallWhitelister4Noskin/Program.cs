@@ -11,7 +11,7 @@ namespace SmallWhitelister4Noskin
     {
         public static void Main(string[] args)
         {
-            const string tomlTemplate = "# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Alistar\"\nFullyWhitelist = false\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ 1,2,3 ]";
+            const string tomlTemplate = "# Path to Noskin mod by Moga\nNoskinPath = ''\n\n# Example on how to add characters\n[[Characters]]\nName = \"Alistar\"\nFullyWhitelist = false\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ 1,2,3 ]\n[[Characters]]\nName = \"Yunara\"\nFullyWhitelist = true\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ ]";
 
             #region Process files i.e. config
             var configString = string.Empty;
@@ -31,6 +31,8 @@ namespace SmallWhitelister4Noskin
 
             //var arr1 = tomlTemplate.ToCharArray();
             //var arr2 = configString.ToCharArray();
+            //Console.WriteLine("template "+arr1.Length);
+            //Console.WriteLine("config "+arr2.Length);
 
             if (config.Characters.Length == 0 || configString == tomlTemplate)
             {
