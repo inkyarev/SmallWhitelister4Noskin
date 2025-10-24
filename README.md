@@ -11,7 +11,7 @@ Drop Noskin into cslol. You then put characters and skin ids in the config(templ
 ## Building from source
 Install .NET framework 4.8, then your IDE should auto restore nuget pkg, if it doesnt run `restore nuget`.
 
-## Attributon
+## Attribution
 Includes wad-extract.exe from [cslol manager tools](https://github.com/LeagueToolkit/cslol-manager)
 
 ## Other info
