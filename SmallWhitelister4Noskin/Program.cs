@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Tomlet;
@@ -13,8 +14,9 @@ namespace SmallWhitelister4Noskin
         public static void Main(string[] args)
         {
             const string constNoskinName = "$noskin";
+            const string wadExtractPath = "wad-extract.exe";
             const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids. \n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Aurora\"\nFullyWhitelist = true\nSkinIds = [ 4, 5, 6, 7, ]\n\n[[Characters]]\nName = \"Viego\"\nFullyWhitelist = true\nSkinIds = [ ]\n\n";
-
+            
             #region Process files i.e. config
             var configString = string.Empty;
             var config = new Config();
@@ -191,7 +193,7 @@ namespace SmallWhitelister4Noskin
                 {
                     using(var pProcess = new Process())
                     {
-                        pProcess.StartInfo.FileName = $@"{cslolPath}\cslol-tools\wad-extract.exe";
+                        pProcess.StartInfo.FileName = wadExtractPath;
                         pProcess.StartInfo.Arguments = $@"{noskinWorkingPath}\{character.Name}.wad.client";
                         pProcess.StartInfo.RedirectStandardOutput = true;
                         pProcess.StartInfo.UseShellExecute = false;
