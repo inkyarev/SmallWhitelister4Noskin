@@ -12,8 +12,9 @@ namespace SmallWhitelister4Noskin
         public static void Main(string[] args)
         {
             const string tomlTemplate = "# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Alistar\"\nFullyWhitelist = false\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ 1,2,3 ]";
+
+            #region Process files i.e. config
             var configString = string.Empty;
-            
             var config = new Config();
             var data = new Data();
 
@@ -28,8 +29,8 @@ namespace SmallWhitelister4Noskin
                 data = TomletMain.To<Data>(File.ReadAllText(Data.Path));
             }
 
-            var arr1 = tomlTemplate.ToCharArray();
-            var arr2 = configString.ToCharArray();
+            //var arr1 = tomlTemplate.ToCharArray();
+            //var arr2 = configString.ToCharArray();
 
             if (config.Characters.Length == 0 || configString == tomlTemplate)
             {
@@ -37,71 +38,21 @@ namespace SmallWhitelister4Noskin
                 Console.ReadKey();
                 return;
             }
-            
+            #endregion
+
+            #region Check and set paths
             if (config.NoskinPath == string.Empty)
             {
                 Console.WriteLine("Uh oh. Seems like you forgot something.");
-                while (config.NoskinPath == string.Empty)
-                {
-                    Console.WriteLine(@"Paste the full path to Noskin mod (it's inside cslol-manager\installed)");
-                    var input = Console.ReadLine();
-                    if (input is null)
-                    {
-                        Console.WriteLine("I said paste the full path to Noskin mod");
-                        continue;
-                    }
-
-                    if (!Directory.Exists(input))
-                    {
-                        Console.WriteLine("This path does not exist");
-                        continue;
-                    }
-
-                    if (!input.Contains("noskin"))
-                    {
-                        Console.WriteLine("Are you sure? (Y/N)");
-                        var key = Console.ReadKey();
-                        if (key.Key != ConsoleKey.Y)
-                        {
-                            Console.WriteLine('\r');
-                            continue;
-                        }
-                    }
-                    config.NoskinPath = input;
-                }
+                GetPath(config);
             }
 
             if (!Directory.Exists(config.NoskinPath))
             {
                 Console.WriteLine("Your noskin path is outdated and doesn't exist");
-                while (config.NoskinPath == string.Empty)
-                {
-                    Console.WriteLine(@"Paste the full path to Noskin mod (it's inside cslol-manager\installed)");
-                    var input = Console.ReadLine();
-                    if (input is null)
-                    {
-                        Console.WriteLine("I said");
-                        continue;
-                    }
-
-                    if (!Directory.Exists(input))
-                    {
-                        Console.WriteLine("This path does not exist");
-                        continue;
-                    }
-
-                    if (!config.NoskinPath.Contains("noskin"))
-                    {
-                        Console.WriteLine("Are you sure? (Y/N)");
-                        var key = Console.ReadKey();
-                        if (key.Key != ConsoleKey.Y)
-                        {
-                            continue;
-                        }
-                    }
-                    config.NoskinPath = input;
-                }
+                GetPath(config);
             }
+            
             
             var cslolPath = config.NoskinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[0];
             var installedPath = cslolPath + @"\installed";
@@ -129,7 +80,9 @@ namespace SmallWhitelister4Noskin
             }
             
             File.WriteAllText(Config.Path, TomletMain.TomlStringFrom(config));
+            #endregion
 
+            #region Restore characters
             var clone = new Character [data.WhitelistedCharacters.Count];
             data.WhitelistedCharacters.CopyTo(clone);
             foreach (var wlCharacter in clone)
@@ -172,9 +125,13 @@ namespace SmallWhitelister4Noskin
                     RestoreSkins(wlCharacter, noskinWorkingPath, data);
                 }
             }
-            
+            #endregion
+
+            #region Whitelist characters
             var fullWhitelist = config.Characters.Where(character => character.FullyWhitelist).ToArray();
             var skinsToWhitelist = config.Characters.Except(fullWhitelist);
+
+            #region Fully whitelisted
             foreach (var character in fullWhitelist)
             {
                 var path = $@"{noskinWorkingPath}\{character.Name}.wad.client";
@@ -221,7 +178,9 @@ namespace SmallWhitelister4Noskin
                 data.WhitelistedCharacters.Add(character);
                 Console.WriteLine($"Whitelisted {character.Name}");
             }
-            
+            #endregion
+
+            #region Whitelist separate skins
             var continuu = false;
             foreach (var character in skinsToWhitelist)
             {
@@ -234,8 +193,9 @@ namespace SmallWhitelister4Noskin
                     {
                         pProcess.StartInfo.FileName = $@"{cslolPath}\cslol-tools\wad-extract.exe";
                         pProcess.StartInfo.Arguments = $@"{noskinWorkingPath}\{character.Name}.wad.client";
+                        pProcess.StartInfo.RedirectStandardOutput = true;
                         pProcess.StartInfo.UseShellExecute = false;
-                        pProcess.StartInfo.CreateNoWindow = false;
+                        pProcess.StartInfo.CreateNoWindow = true;
                         pProcess.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                         pProcess.Start();
                         pProcess.WaitForExit();
@@ -284,6 +244,9 @@ namespace SmallWhitelister4Noskin
                 if(continuu) continue;
                 data.WhitelistedCharacters.Add(character);
             }
+            #endregion
+            #endregion
+             
             File.WriteAllText(Data.Path, TomletMain.TomlStringFrom(data));
 
             Console.WriteLine("Done");
@@ -361,6 +324,41 @@ namespace SmallWhitelister4Noskin
 
             data.WhitelistedCharacters.Remove(wlCharacter);
             Console.WriteLine($"Restored {wlCharacter.Name}");
+        }
+
+        private static void GetPath(Config config)
+        {
+            var end = false;
+            while (!end)
+            {
+                Console.WriteLine(@"Paste the full path to Noskin mod (it's inside cslol-manager\installed)");
+                var input = Console.ReadLine();
+                if (input is null)
+                {
+                    Console.WriteLine("I said");
+                    continue;
+                }
+
+                if (!Directory.Exists(input))
+                {
+                    Console.WriteLine("This path does not exist");
+                    continue;
+                }
+
+                if (!input.Contains("noskin"))
+                {
+                    Console.WriteLine("Are you sure? (Y/N)");
+                    var key = Console.ReadKey();
+                    if (key.Key != ConsoleKey.Y)
+                    {
+                        Console.WriteLine('\r');
+                        continue;
+                    }
+                    Console.WriteLine('\r');
+                }
+                config.NoskinPath = input;
+                end = true;
+            }
         }
     }
 }
