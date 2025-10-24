@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Tomlet;
 
 namespace SmallWhitelister4Noskin
@@ -11,6 +13,7 @@ namespace SmallWhitelister4Noskin
     {
         public static void Main(string[] args)
         {
+            const string constNoskinName = "$noskin";
             const string tomlTemplate = "# Path to Noskin mod by Moga\nNoskinPath = ''\n\n# Example on how to add characters\n[[Characters]]\nName = \"Alistar\"\nFullyWhitelist = false\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ 1,2,3 ]\n[[Characters]]\nName = \"Yunara\"\nFullyWhitelist = true\n# Refer to https://martynasxs.dev/skindb for skin ids. If FullyWhitelist is true this field is ignored\nSkinIds = [ ]";
 
             #region Process files i.e. config
@@ -58,28 +61,22 @@ namespace SmallWhitelister4Noskin
             
             var cslolPath = config.NoskinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[0];
             var installedPath = cslolPath + @"\installed";
-            var noskinName = config.NoskinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[1];
+            var noskinVer = config.NoskinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[1]
+                .Split(new []{ '_' }, StringSplitOptions.RemoveEmptyEntries);
+            var noskinName = noskinVer.Length == 1 ? constNoskinName : $"{constNoskinName}_{noskinVer[1]}";
 
-            string noskinWorkingPath;
-            if (!noskinName.StartsWith("1"))
+            try
             {
-                try
-                {
-                    Directory.Move(config.NoskinPath, $@"{installedPath}\1{noskinName}");
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    Console.WriteLine("CsLoL is being used by another program");
-                    Console.ReadKey();
-                    Environment.Exit(5);
-                }
-                config.NoskinPath = $@"{installedPath}\1{noskinName}";
-                noskinWorkingPath = $@"{installedPath}\1{noskinName}\WAD";
+                Directory.Move(config.NoskinPath, $@"{installedPath}\{noskinName}");
             }
-            else
+            catch (UnauthorizedAccessException)
             {
-                noskinWorkingPath = $@"{installedPath}\{noskinName}\WAD";
+                Console.WriteLine("CsLoL is being used by another program");
+                Console.ReadKey();
+                Environment.Exit(5);
             }
+            config.NoskinPath = $@"{installedPath}\{noskinName}";
+            var noskinWorkingPath = $@"{installedPath}\{noskinName}\WAD";
             
             File.WriteAllText(Config.Path, TomletMain.TomlStringFrom(config));
             #endregion
@@ -183,7 +180,6 @@ namespace SmallWhitelister4Noskin
             #endregion
 
             #region Whitelist separate skins
-            var continuu = false;
             foreach (var character in skinsToWhitelist)
             {
                 if(character.SkinIds.Length == 0) continue;
@@ -200,7 +196,20 @@ namespace SmallWhitelister4Noskin
                         pProcess.StartInfo.CreateNoWindow = true;
                         pProcess.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                         pProcess.Start();
+                        Console.WriteLine("Extracting wad");
+                        var cts = new CancellationTokenSource();
+                        Task.Run(() =>
+                        {
+                            var sw = Stopwatch.StartNew();
+                            while (!cts.Token.IsCancellationRequested)
+                            {
+                                Console.Write($"\rElapsed: {sw.Elapsed:mm\\:ss}");
+                                Thread.Sleep(100);
+                            }
+                        }, cts.Token);
                         pProcess.WaitForExit();
+                        cts.Cancel();
+                        Console.WriteLine("\nSuccess");
                     }
                     File.Delete(path);
                 }
@@ -215,17 +224,27 @@ namespace SmallWhitelister4Noskin
                     foreach (var characterPath in Directory.GetDirectories(
                                  $@"{noskinWorkingPath}\{character.Name}.wad\data\characters"))
                     {
+                        var characterName = characterPath.Replace($@"{noskinWorkingPath}\{character.Name}.wad\data\characters\", string.Empty);
                         var path1 = $@"{characterPath}\skins\skin{skin}.bin";
                         var wlPath1 = $@"{characterPath}\skins\skin{skin}.bin.whitelisted";
                         if (File.Exists(wlPath1))
                         {
-                            Console.WriteLine($"{character.Name} already whitelisted");
-                            continuu = true;
-                            break;
+                            if (characterName.ToLower() == character.Name.ToLower())
+                            {
+                                Console.WriteLine($"skin{skin}.bin for {character.Name} already whitelisted");
+                                continue;
+                            }
+                            Console.WriteLine($"skin{skin}.bin for{characterName} ({character.Name}) already whitelisted");
+                            continue;
                         }
                         if (!File.Exists(path1))
                         {
-                            Console.WriteLine($"No skin{skin}.bin for {character.Name} found. Skipping.");
+                            if (characterName.ToLower() == character.Name.ToLower())
+                            {
+                                Console.WriteLine($"No skin{skin}.bin for {character.Name} found. Skipping.");
+                                continue;
+                            }
+                            Console.WriteLine($"No skin{skin}.bin for {characterName} ({character.Name}) found. Skipping.");
                             continue;
                         }
 
@@ -239,11 +258,14 @@ namespace SmallWhitelister4Noskin
                             Console.ReadKey();
                             Environment.Exit(5);
                         }
-                        Console.WriteLine($"Whitelisted skin{skin}.bin for {character.Name}");
+                        if (characterName.ToLower() == character.Name.ToLower())
+                        {
+                            Console.WriteLine($"Whitelisted skin{skin}.bin for {character.Name}");
+                            continue;
+                        }
+                        Console.WriteLine($"Whitelisted skin{skin}.bin for {characterName} ({character.Name})");
                     }
-                    if(continuu) break;
                 }
-                if(continuu) continue;
                 data.WhitelistedCharacters.Add(character);
             }
             #endregion
@@ -263,10 +285,16 @@ namespace SmallWhitelister4Noskin
                 foreach (var characterPath in Directory.GetDirectories(
                              $@"{noskinWorkingPath}\{wlCharacter.Name}.wad\data\characters"))
                 {
+                    var characterName = characterPath.Replace($@"{noskinWorkingPath}\{wlCharacter.Name}.wad\data\characters\", string.Empty);
                     var path = $@"{characterPath}\skins\skin{skin}.bin.whitelisted";
                     if (!File.Exists(path))
                     {
-                        Console.WriteLine($"No skin{skin}.bin for {wlCharacter.Name} found for restore. Skipping.");
+                        if (characterName.ToLower() == wlCharacter.Name.ToLower())
+                        {
+                            Console.WriteLine($"No skin{skin}.bin for {wlCharacter.Name} found for restore. Skipping.");
+                            continue;
+                        }
+                        Console.WriteLine($"No skin{skin}.bin for {characterName} ({wlCharacter.Name}) found for restore. Skipping.");
                         continue;
                     }
 
@@ -281,7 +309,12 @@ namespace SmallWhitelister4Noskin
                         Environment.Exit(5);
                     }
                     
-                    Console.WriteLine($"Restored skin{skin}.bin for {wlCharacter.Name}");
+                    if (characterName.ToLower() == wlCharacter.Name.ToLower())
+                    {
+                        Console.WriteLine($"Restored skin{skin}.bin for {wlCharacter.Name}");
+                        continue;
+                    }
+                    Console.WriteLine($"Restored skin{skin}.bin for {characterName} ({wlCharacter.Name})");
                 }
             }
 
