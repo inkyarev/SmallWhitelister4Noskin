@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,8 +16,11 @@ namespace SmallWhitelister4Noskin
         {
             const string constNoskinName = "$noskin";
             const string wadExtractPath = "wad-extract.exe";
-            const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids. \n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Aurora\"\nFullyWhitelist = true\nSkinIds = [ 4, 5, 6, 7, ]\n\n[[Characters]]\nName = \"Viego\"\nFullyWhitelist = true\nSkinIds = [ ]\n\n";
+            const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids. \n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Aurora\"\nFullyWhitelist = false\nSkinIds = [ 4, 5, 6, 7, ]\n\n[[Characters]]\nName = \"Viego\"\nFullyWhitelist = true\nSkinIds = [ ]\n\n";
+            const string nameArt = "  _   _      ____  _    _        __        ___     _ _       _ _     _            \n | \\ | | ___/ ___|| | _(_)_ __   \\ \\      / / |__ (_) |_ ___| (_)___| |_ ___ _ __ \n |  \\| |/ _ \\___ \\| |/ / | '_ \\   \\ \\ /\\ / /| '_ \\| | __/ _ \\ | / __| __/ _ \\ '__|\n | |\\  | (_) |__) |   <| | | | |   \\ V  V / | | | | | ||  __/ | \\__ \\ ||  __/ |   \n |_| \\_|\\___/____/|_|\\_\\_|_| |_|   _\\_/\\_/  |_| |_|_|\\__\\___|_|_|___/\\__\\___|_|   \n                         | __ ) _   _  |  _ \\ _____   __                               \n                         |  _ \\| | | | | |_) / _ \\ \\ / /                               \n                         | |_) | |_| | |  _ <  __/\\ V /                                \n                         |____/ \\__, | |_| \\_\\___| \\_/                                 \n                                |___/                                                  ";
+            const string girlsKissing = "         -             @#*%                                                                   @:     @@@       @@@      \n        :         .#%***%*@*****@#*@@@@#.                                                   . -    @@@@@@    *@@@*%@@@@ \n       .      %***+****+*%#**+#**%*************@                                         @@@ : .-  %%@@###%   @@@  @    \n       .  @*@*+*#****##%**#@*######*#####*####***#.                                   @  %  + *- %%@  %##%   @@  @ =**% \n       .#***#*####*#*#**###****#%****##%##########***                                : :-  :: *-@# :  .##@   #= %- --- .\n**##*#*#*#********#**#*******%#*****#######*#####*%*****                       . =     .%-@@ .@%%@%@:   %@@@+=-=   -- - \n*##**********#**#*#********#*%*******##*%##########*****                    :=: .:----%----:        ::.@@@ --:=*- ----  \n***********#***#*##*********#***********##%####*#######*                  + *:--------------= -:     @%@@=   -.=* ---:- \n*******#********#*#***********************##%##*##**#%#*              .: -:----::**-+=---::---=:----@+@@@    :.=+ -:::--\n****#**********#*************#*************##%*##**#*###            *.:-::-::::*-::::+:::::::::+=:+=-:@@@     . =:-:::--\n*##*****************************************#####****#%%#*         ::-:::::::-*:::::-+-::::::::::%%::#@@@     ::-:::::--\n#***********************************************+*####*%%##     -::::-.::::-:*-::::::*::::::::::@@-:-@@@+     :.::::::--\n**********%********************#*#***********+*+**######## *  *=.   -.:::::::-:::::::+:-:::::::@@#:%:@@@=     . .:::-:-:\n*******%**#********************%**%******+***+**##**######@ #=.:  :.:: ::.::-:::::::::=:::::::@@@=::%@@*:     . -:::::-:\n***#**%******+*****************#%%*=*+===+******##*#*####@# =:::=-:.. :-  :+*=::::::::-::::::+@@@-###@@::     ..+:::::-:\n**%***#******++=+**=***********%.*%*:%+=+********#@*#####@#---:-::::::-.. #+*-::::::::::-:::::::@@##@@:::     :.::::-::-\n%@#*****##*#++++**+==*****=*=**@..* *+=******#***#%#*###%%=--::*:::::-::-  :=:::::::::::::::::::::. @%-::     :.::::-:--\n*****@***%***++++*===*++===+===:. --  *.#*****#***#.%####%%+--+-::::::::   ==::   :::::. ::.::: :. =@::-.     :-:::-:-::\n****##**%#***++++*++***+==+=*=*.   =   :.#****#****.=*##%##+--*::::::::    *: .    :: . : :-.   :::*@-.:.    . ::::::-:-\n*******#*#*********************     :    .*********#.*##*=--=.-:::::::     *::::::::::     :::..::-%@:::.    ::::-:::-:-\n*******%*#*******************+        *+:  =*******.*@%%=*--:+:::::::   ::: ::.::::::::::::-.::::-:@@:::     .::-::::---\n##****##******************+++*     *.   -   #*****#*@@%%* #:.*::::::=.:     %::::::::::::-::= :::-+@@+::     ::-:-::-:--\n*****%*******************++++   +      =     -****%@#*#-. %:.=-::::-  -      :::::::::::::::: ::::=@@-::    ::::-:-:-:::\n****#******************+*++=*                +****:+*#  * :*.--::::    .      :-:::::::-:::::: . :+@*::*    -::-:::---::\n**********************++*==*        .. +%@+=   +*#   *#    #..::+::*%%@@%%*: : -.::::::-:::::*  .:%@-+--   :-:--:-:-:-::\n#**#*****##**********+*%==*       .=@%@@      *+@=        -  *=::-+=: **     -#%*::-:::-:::::-    @@:::+   -- -:-:---:--\n##******###*##******+*+==+    :*%#%. -#**    *+*=              -:*=  *       :  -:.=::::::::::  ..@@:-*+  ---.-:-:-:--::\n**#@%-=%#%*#********++%==  .=+.*=+- :.= .   .+                  *:- .           *::.:::::::-::  .@@@+..*  :=:     :.:--:\n@@@:*:-#@:*##******+*%=+:             .   .-            -       :*  .   ..      -:* :::::-:::=:-:@@*.-:: -=-::   ::.::::\n*#%-::#=*+##**##****%=#=#         ..                              :          == +=  ::-::=::-+ -:@@  .-. :-:--: .-:-::::\n*##%:....*#####**@*%*++==                               :                      +   -:*::::-::+::-@%+  . :-----:.:.::-:::\n##%=:.  -*#*#%*@-%#*+++==*                             -                         : -*:-::-::--*-@@:-: : -::---:::  -::::\n#*%@: -  ###%*   :%*+++==*                           # *                          :  :+:: +-=-  : =:: + -=---:---.: ::::\n##@#*@: +#*:      #**=+==.#                          :  *                            +%*+ :++= == ::  -=-:-:----:: :.:::\n#####**%*#:   --   @*++*=- %                         . .                   -          **::*-:*      @* --------::: .::::\n#**####******%* -@  #*+++*  -                       %  *               -=         .=*:----   *   *=. +--=------:- :    :\n%    +%####*#        #*+++     .                         =           :        .*       =       **     =----:---::.:.    \n #     #%%#%:         **++=      .                       %              .               :      *-=-::-=:=-----:-::::   :\n        ##%.           %**:                             .                                :@+ ..#-++**==-----::-::::::  \n#@    =%+%.             #** :      :##%*-.          .    .           =                           :=+=-*------:-::::::: -\n##   %  *   =            +*+  :   =-------*--  : . .      :                          .          - + =**---------------::\n#   %          :          :*    *---------==.               + .=#%*                      :*    :  *#------=-----------*-\n     +-           :         #  # =-=+***+-==                :    *                    . = :    :   @-----=-----------+--\n    = *               .      %=  =====+===                  :                             :        #----=----------+=-::\n#    :%                    %@@ =     -=====                 -   :                      :+*       %*---==----------==-:-.";
             
+            Console.WriteLine(nameArt);
             #region Process files i.e. config
             var configString = string.Empty;
             var config = new Config();
@@ -40,7 +44,7 @@ namespace SmallWhitelister4Noskin
 
             if (config.Characters.Length == 0 || configString == tomlTemplate)
             {
-                Console.WriteLine("Set up the config.toml to start whitelisting");
+                Console.WriteLine("[WRN] Please configure your config.toml and restart the whitelister");
                 Console.ReadKey();
                 return;
             }
@@ -49,16 +53,14 @@ namespace SmallWhitelister4Noskin
             #region Check and set paths
             if (config.NoskinPath == string.Empty)
             {
-                Console.WriteLine("Uh oh. Seems like you forgot something.");
                 GetPath(config);
             }
 
             if (!Directory.Exists(config.NoskinPath))
             {
-                Console.WriteLine("Your noskin path is outdated and doesn't exist");
+                Console.WriteLine("[ERR] Your NoSkin path does not exist!");
                 GetPath(config);
             }
-            
             
             var cslolPath = config.NoskinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[0];
             var installedPath = cslolPath + @"\installed";
@@ -75,7 +77,7 @@ namespace SmallWhitelister4Noskin
             }
             catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
             {
-                Console.WriteLine("CsLoL directory is being used by another program");
+                Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
                 Console.ReadKey();
                 Environment.Exit(5);
             }
@@ -86,6 +88,7 @@ namespace SmallWhitelister4Noskin
             #endregion
 
             #region Restore characters
+            var stopwatch = Stopwatch.StartNew();
             var clone = new Character [data.WhitelistedCharacters.Count];
             data.WhitelistedCharacters.CopyTo(clone);
             foreach (var wlCharacter in clone)
@@ -137,6 +140,8 @@ namespace SmallWhitelister4Noskin
             #region Fully whitelisted
             foreach (var character in fullWhitelist)
             {
+                var swInd = Stopwatch.StartNew();
+                Console.WriteLine($"[INF] Whitelisting: {character.Name}");
                 var path = $@"{noskinWorkingPath}\{character.Name}.wad.client";
                 var altPath = $@"{noskinWorkingPath}\{character.Name}.wad";
                 var wlPath = $@"{noskinWorkingPath}\{character.Name}.wad.client.whitelisted";
@@ -149,7 +154,7 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
-                        Console.WriteLine("CsLoL directory is being used by another program");
+                        Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
@@ -162,24 +167,27 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
-                        Console.WriteLine("CsLoL directory is being used by another program");
+                        Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
                 }
                 else if (File.Exists(wlPath) || Directory.Exists(wlAltPath))
                 {
-                    Console.WriteLine($"{character.Name} already whitelisted");
+                    Console.WriteLine($"[INF] {character.Name} is already whitelisted");
+                    Console.WriteLine();
                     continue;
                 }
                 else 
                 {
-                    Console.WriteLine($"No {character.Name} found. Skipping.");
+                    Console.WriteLine($"[WRN] Failed to find {character.Name}. Skipping");
+                    Console.WriteLine();
                     continue;
                 }
 
                 data.WhitelistedCharacters.Add(character);
-                Console.WriteLine($"Whitelisted {character.Name}");
+                Console.WriteLine($"[INF] Finished {character.Name}: Time {swInd.Elapsed:mm\\:ss\\.ff}");
+                Console.WriteLine();
             }
             #endregion
 
@@ -188,6 +196,8 @@ namespace SmallWhitelister4Noskin
             {
                 if(character.SkinIds.Length == 0) continue;
                 
+                var swInd = Stopwatch.StartNew();
+                var skinStr = string.Join(", ", character.SkinIds.Select(skinId => $"Skin{skinId}"));
                 var path = $@"{noskinWorkingPath}\{character.Name}.wad.client";
                 if (File.Exists(path))
                 {
@@ -195,60 +205,42 @@ namespace SmallWhitelister4Noskin
                     {
                         pProcess.StartInfo.FileName = wadExtractPath;
                         pProcess.StartInfo.Arguments = $@"{noskinWorkingPath}\{character.Name}.wad.client";
-                        pProcess.StartInfo.RedirectStandardOutput = true;
+                        pProcess.StartInfo.RedirectStandardOutput = false;
                         pProcess.StartInfo.UseShellExecute = false;
                         pProcess.StartInfo.CreateNoWindow = true;
                         pProcess.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                         pProcess.Start();
-                        Console.WriteLine("Extracting wad");
-                        var cts = new CancellationTokenSource();
-                        Task.Run(() =>
-                        {
-                            var sw = Stopwatch.StartNew();
-                            while (!cts.Token.IsCancellationRequested)
-                            {
-                                Console.Write($"\rElapsed: {sw.Elapsed:mm\\:ss}");
-                                Thread.Sleep(100);
-                            }
-                        }, cts.Token);
+                        Console.WriteLine($"[INF] Extracting: {character.Name}");
                         pProcess.WaitForExit();
-                        cts.Cancel();
-                        Console.WriteLine("\nSuccess");
                     }
                     File.Delete(path);
                 }
                 else if (!Directory.Exists($@"{noskinWorkingPath}\{character.Name}.wad"))
                 {
-                    Console.WriteLine($"No {character.Name} found. Skipping.");
+                    Console.WriteLine($"[WRN] Failed to find {character.Name}. Skipping");
                     continue;
                 }
 
-                foreach (var skin in character.SkinIds)
+                Console.WriteLine($"[INF] Whitelisting: [{skinStr}] for {character.Name}");
+                foreach (var characterPath in Directory.GetDirectories(
+                             $@"{noskinWorkingPath}\{character.Name}.wad\data\characters"))
                 {
-                    foreach (var characterPath in Directory.GetDirectories(
-                                 $@"{noskinWorkingPath}\{character.Name}.wad\data\characters"))
+                    var characterName = characterPath.Replace($@"{noskinWorkingPath}\{character.Name}.wad\data\characters\", string.Empty);
+                    var awlList = new List<string>();
+                    var ftfList = new List<string>();
+                    foreach (var skin in character.SkinIds)
                     {
-                        var characterName = characterPath.Replace($@"{noskinWorkingPath}\{character.Name}.wad\data\characters\", string.Empty);
                         var path1 = $@"{characterPath}\skins\skin{skin}.bin";
                         var wlPath1 = $@"{characterPath}\skins\skin{skin}.bin.whitelisted";
                         if (File.Exists(wlPath1))
                         {
-                            if (characterName.ToLower() == character.Name.ToLower())
-                            {
-                                Console.WriteLine($"skin{skin}.bin for {character.Name} already whitelisted");
-                                continue;
-                            }
-                            Console.WriteLine($"skin{skin}.bin for{characterName} ({character.Name}) already whitelisted");
+                            awlList.Add($"Skin{skin}");
                             continue;
                         }
+
                         if (!File.Exists(path1))
                         {
-                            if (characterName.ToLower() == character.Name.ToLower())
-                            {
-                                Console.WriteLine($"No skin{skin}.bin for {character.Name} found. Skipping.");
-                                continue;
-                            }
-                            Console.WriteLine($"No skin{skin}.bin for {characterName} ({character.Name}) found. Skipping.");
+                            ftfList.Add($"Skin{skin}");
                             continue;
                         }
 
@@ -258,47 +250,66 @@ namespace SmallWhitelister4Noskin
                         }
                         catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                         {
-                            Console.WriteLine("CsLoL directory is being used by another program");
+                            Console.WriteLine(
+                                "[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
                             Console.ReadKey();
                             Environment.Exit(5);
                         }
-                        if (characterName.ToLower() == character.Name.ToLower())
-                        {
-                            Console.WriteLine($"Whitelisted skin{skin}.bin for {character.Name}");
-                            continue;
-                        }
-                        Console.WriteLine($"Whitelisted skin{skin}.bin for {characterName} ({character.Name})");
+                    }
+
+                    if (awlList.Count > 0)
+                    {
+                        Console.WriteLine(characterName.ToLower() == character.Name.ToLower()
+                            ? $"[INF] Already whitelisted: [{string.Join(", ", awlList)}] for {character.Name} "
+                            : $"[INF] Already whitelisted: [{string.Join(", ", awlList)}] for {characterName} ({character.Name})");
+                    }
+                    if (ftfList.Count > 0)
+                    {
+                        Console.WriteLine(characterName.ToLower() == character.Name.ToLower()
+                            ? $"[INF] Failed to find: [{string.Join(", ", ftfList)}] for {character.Name}"
+                            : $"[INF] Failed to find: [{string.Join(", ", ftfList)}] for {characterName} ({character.Name})");
                     }
                 }
-                data.WhitelistedCharacters.Add(character);
+
+                Console.WriteLine($@"[INF] Finished whitelisting: [{skinStr}] for {character.Name}; Time [{swInd.Elapsed:mm\:ss\.ff}]");
+                if (!data.WhitelistedCharacters.Contains(character))
+                {
+                    data.WhitelistedCharacters.Add(character);
+                }
+                Console.WriteLine();
             }
             #endregion
             #endregion
              
             File.WriteAllText(Data.Path, TomletMain.TomlStringFrom(data));
 
-            Console.WriteLine("Done");
-
+            Console.WriteLine();
+            Console.WriteLine($"[INF] Finished Whitelist! Total time: [{stopwatch.Elapsed:mm\\:ss\\.ff}]");
+            //Console.WriteLine(art2);
+            Console.WriteLine($"Press Enter to exit...");
             Console.ReadKey();
         }
 
         private static void RestoreSkins(Character wlCharacter, string noskinWorkingPath, Data data)
         {
-            foreach (var skin in wlCharacter.SkinIds)
+            var skinStr = string.Join(", ", wlCharacter.SkinIds.Select(skinId => $"Skin{skinId}"));
+            foreach (var characterPath in Directory.GetDirectories(
+                         $@"{noskinWorkingPath}\{wlCharacter.Name}.wad\data\characters"))
             {
-                foreach (var characterPath in Directory.GetDirectories(
-                             $@"{noskinWorkingPath}\{wlCharacter.Name}.wad\data\characters"))
+                var characterName =
+                    characterPath.Replace($@"{noskinWorkingPath}\{wlCharacter.Name}.wad\data\characters\", string.Empty);
+
+                Console.WriteLine(characterName.ToLower() == wlCharacter.Name.ToLower()
+                    ? $"[INF] Restoring: [{skinStr}] for {wlCharacter.Name}"
+                    : $"[INF] Restoring: [{skinStr}] for {characterName} ({wlCharacter.Name})");
+
+                var ftfList = new List<string>();
+                foreach (var skin in wlCharacter.SkinIds)
                 {
-                    var characterName = characterPath.Replace($@"{noskinWorkingPath}\{wlCharacter.Name}.wad\data\characters\", string.Empty);
                     var path = $@"{characterPath}\skins\skin{skin}.bin.whitelisted";
                     if (!File.Exists(path))
                     {
-                        if (characterName.ToLower() == wlCharacter.Name.ToLower())
-                        {
-                            Console.WriteLine($"No skin{skin}.bin for {wlCharacter.Name} found for restore. Skipping.");
-                            continue;
-                        }
-                        Console.WriteLine($"No skin{skin}.bin for {characterName} ({wlCharacter.Name}) found for restore. Skipping.");
+                        ftfList.Add($"Skin{skin}");
                         continue;
                     }
 
@@ -308,25 +319,27 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
-                        Console.WriteLine("CsLoL directory is being used by another program");
+                        Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
-                    
-                    if (characterName.ToLower() == wlCharacter.Name.ToLower())
-                    {
-                        Console.WriteLine($"Restored skin{skin}.bin for {wlCharacter.Name}");
-                        continue;
-                    }
-                    Console.WriteLine($"Restored skin{skin}.bin for {characterName} ({wlCharacter.Name})");
+                }
+                if (ftfList.Count > 0)
+                {
+                    Console.WriteLine(characterName.ToLower() == wlCharacter.Name.ToLower()
+                        ? $"[INF] Failed to find: [{string.Join(", ", ftfList)}] for {wlCharacter.Name}"
+                        : $"[INF] Failed to find: [{string.Join(", ", ftfList)}] for {characterName} ({wlCharacter.Name})");
                 }
             }
 
+            Console.WriteLine($"[INF] Finished restoring: [{skinStr}] for {wlCharacter.Name}");
+            Console.WriteLine();
             data.WhitelistedCharacters.Remove(wlCharacter);
         }
 
         private static void RestoreFromFullyWhitelisted(string noskinWorkingPath, Character wlCharacter, Data data)
         {
+            Console.WriteLine($"[INF] Restoring: {wlCharacter.Name}");
             var path = $@"{noskinWorkingPath}\{wlCharacter.Name}.wad.whitelisted";
             var altPath = $@"{noskinWorkingPath}\{wlCharacter.Name}.wad.client.whitelisted";
             if (Directory.Exists(path))
@@ -337,7 +350,7 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
-                    Console.WriteLine("CsLoL directory is being used by another program");
+                    Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
                     Console.ReadKey();
                     Environment.Exit(5);
                 }
@@ -350,19 +363,20 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
-                    Console.WriteLine("CsLoL directory is being used by another program");
+                    Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
                     Console.ReadKey();
                     Environment.Exit(5);
                 }
             }
             else
             {
-                Console.WriteLine($"No {wlCharacter.Name} found for restore. Skipping.");
+                Console.WriteLine($"[WRN] Failed to find {wlCharacter.Name}. Skipping");
                 return;
             }
 
             data.WhitelistedCharacters.Remove(wlCharacter);
-            Console.WriteLine($"Restored {wlCharacter.Name}");
+            Console.WriteLine($"[INF] Finished restoring: {wlCharacter.Name}");
+            Console.WriteLine();
         }
 
         private static void GetPath(Config config)
@@ -370,17 +384,11 @@ namespace SmallWhitelister4Noskin
             var end = false;
             while (!end)
             {
-                Console.WriteLine(@"Paste the full path to Noskin mod (it's inside cslol-manager\installed)");
+                Console.WriteLine(@"[INF] Paste the full path to NoSkin here and press enter, Ex: C:\mods\cslol\installed\noskin");
                 var input = Console.ReadLine();
-                if (input is null)
+                if (input is null || !Directory.Exists(input))
                 {
-                    Console.WriteLine("I said");
-                    continue;
-                }
-
-                if (!Directory.Exists(input))
-                {
-                    Console.WriteLine("This path does not exist");
+                    Console.WriteLine("[ERR] This path does not exist!");
                     continue;
                 }
 
@@ -398,6 +406,8 @@ namespace SmallWhitelister4Noskin
                 config.NoskinPath = input;
                 end = true;
             }
+
+            Console.WriteLine();
         }
     }
 }
