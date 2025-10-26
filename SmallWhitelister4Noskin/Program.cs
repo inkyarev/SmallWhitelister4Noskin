@@ -4,9 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Tomlet;
+using Tomlet.Models;
 
 namespace SmallWhitelister4Noskin
 {
@@ -14,13 +13,77 @@ namespace SmallWhitelister4Noskin
     {
         public static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             const string constNoskinName = "$noskin";
             const string wadExtractPath = "wad-extract.exe";
-            const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids. \n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to Noskin mod by Moga\nNoskinPath = ''\n\n[[Characters]]\nName = \"Aurora\"\nFullyWhitelist = false\nSkinIds = [ 4, 5, 6, 7, ]\n\n[[Characters]]\nName = \"Viego\"\nFullyWhitelist = true\nSkinIds = [ ]\n\n";
-            const string nameArt = "  _   _      ____  _    _        __        ___     _ _       _ _     _            \n | \\ | | ___/ ___|| | _(_)_ __   \\ \\      / / |__ (_) |_ ___| (_)___| |_ ___ _ __ \n |  \\| |/ _ \\___ \\| |/ / | '_ \\   \\ \\ /\\ / /| '_ \\| | __/ _ \\ | / __| __/ _ \\ '__|\n | |\\  | (_) |__) |   <| | | | |   \\ V  V / | | | | | ||  __/ | \\__ \\ ||  __/ |   \n |_| \\_|\\___/____/|_|\\_\\_|_| |_|   _\\_/\\_/  |_| |_|_|\\__\\___|_|_|___/\\__\\___|_|   \n                         | __ ) _   _  |  _ \\ _____   __                               \n                         |  _ \\| | | | | |_) / _ \\ \\ / /                               \n                         | |_) | |_| | |  _ <  __/\\ V /                                \n                         |____/ \\__, | |_| \\_\\___| \\_/                                 \n                                |___/                                                  ";
-            const string girlsKissing = "         -             @#*%                                                                   @:     @@@       @@@      \n        :         .#%***%*@*****@#*@@@@#.                                                   . -    @@@@@@    *@@@*%@@@@ \n       .      %***+****+*%#**+#**%*************@                                         @@@ : .-  %%@@###%   @@@  @    \n       .  @*@*+*#****##%**#@*######*#####*####***#.                                   @  %  + *- %%@  %##%   @@  @ =**% \n       .#***#*####*#*#**###****#%****##%##########***                                : :-  :: *-@# :  .##@   #= %- --- .\n**##*#*#*#********#**#*******%#*****#######*#####*%*****                       . =     .%-@@ .@%%@%@:   %@@@+=-=   -- - \n*##**********#**#*#********#*%*******##*%##########*****                    :=: .:----%----:        ::.@@@ --:=*- ----  \n***********#***#*##*********#***********##%####*#######*                  + *:--------------= -:     @%@@=   -.=* ---:- \n*******#********#*#***********************##%##*##**#%#*              .: -:----::**-+=---::---=:----@+@@@    :.=+ -:::--\n****#**********#*************#*************##%*##**#*###            *.:-::-::::*-::::+:::::::::+=:+=-:@@@     . =:-:::--\n*##*****************************************#####****#%%#*         ::-:::::::-*:::::-+-::::::::::%%::#@@@     ::-:::::--\n#***********************************************+*####*%%##     -::::-.::::-:*-::::::*::::::::::@@-:-@@@+     :.::::::--\n**********%********************#*#***********+*+**######## *  *=.   -.:::::::-:::::::+:-:::::::@@#:%:@@@=     . .:::-:-:\n*******%**#********************%**%******+***+**##**######@ #=.:  :.:: ::.::-:::::::::=:::::::@@@=::%@@*:     . -:::::-:\n***#**%******+*****************#%%*=*+===+******##*#*####@# =:::=-:.. :-  :+*=::::::::-::::::+@@@-###@@::     ..+:::::-:\n**%***#******++=+**=***********%.*%*:%+=+********#@*#####@#---:-::::::-.. #+*-::::::::::-:::::::@@##@@:::     :.::::-::-\n%@#*****##*#++++**+==*****=*=**@..* *+=******#***#%#*###%%=--::*:::::-::-  :=:::::::::::::::::::::. @%-::     :.::::-:--\n*****@***%***++++*===*++===+===:. --  *.#*****#***#.%####%%+--+-::::::::   ==::   :::::. ::.::: :. =@::-.     :-:::-:-::\n****##**%#***++++*++***+==+=*=*.   =   :.#****#****.=*##%##+--*::::::::    *: .    :: . : :-.   :::*@-.:.    . ::::::-:-\n*******#*#*********************     :    .*********#.*##*=--=.-:::::::     *::::::::::     :::..::-%@:::.    ::::-:::-:-\n*******%*#*******************+        *+:  =*******.*@%%=*--:+:::::::   ::: ::.::::::::::::-.::::-:@@:::     .::-::::---\n##****##******************+++*     *.   -   #*****#*@@%%* #:.*::::::=.:     %::::::::::::-::= :::-+@@+::     ::-:-::-:--\n*****%*******************++++   +      =     -****%@#*#-. %:.=-::::-  -      :::::::::::::::: ::::=@@-::    ::::-:-:-:::\n****#******************+*++=*                +****:+*#  * :*.--::::    .      :-:::::::-:::::: . :+@*::*    -::-:::---::\n**********************++*==*        .. +%@+=   +*#   *#    #..::+::*%%@@%%*: : -.::::::-:::::*  .:%@-+--   :-:--:-:-:-::\n#**#*****##**********+*%==*       .=@%@@      *+@=        -  *=::-+=: **     -#%*::-:::-:::::-    @@:::+   -- -:-:---:--\n##******###*##******+*+==+    :*%#%. -#**    *+*=              -:*=  *       :  -:.=::::::::::  ..@@:-*+  ---.-:-:-:--::\n**#@%-=%#%*#********++%==  .=+.*=+- :.= .   .+                  *:- .           *::.:::::::-::  .@@@+..*  :=:     :.:--:\n@@@:*:-#@:*##******+*%=+:             .   .-            -       :*  .   ..      -:* :::::-:::=:-:@@*.-:: -=-::   ::.::::\n*#%-::#=*+##**##****%=#=#         ..                              :          == +=  ::-::=::-+ -:@@  .-. :-:--: .-:-::::\n*##%:....*#####**@*%*++==                               :                      +   -:*::::-::+::-@%+  . :-----:.:.::-:::\n##%=:.  -*#*#%*@-%#*+++==*                             -                         : -*:-::-::--*-@@:-: : -::---:::  -::::\n#*%@: -  ###%*   :%*+++==*                           # *                          :  :+:: +-=-  : =:: + -=---:---.: ::::\n##@#*@: +#*:      #**=+==.#                          :  *                            +%*+ :++= == ::  -=-:-:----:: :.:::\n#####**%*#:   --   @*++*=- %                         . .                   -          **::*-:*      @* --------::: .::::\n#**####******%* -@  #*+++*  -                       %  *               -=         .=*:----   *   *=. +--=------:- :    :\n%    +%####*#        #*+++     .                         =           :        .*       =       **     =----:---::.:.    \n #     #%%#%:         **++=      .                       %              .               :      *-=-::-=:=-----:-::::   :\n        ##%.           %**:                             .                                :@+ ..#-++**==-----::-::::::  \n#@    =%+%.             #** :      :##%*-.          .    .           =                           :=+=-*------:-::::::: -\n##   %  *   =            +*+  :   =-------*--  : . .      :                          .          - + =**---------------::\n#   %          :          :*    *---------==.               + .=#%*                      :*    :  *#------=-----------*-\n     +-           :         #  # =-=+***+-==                :    *                    . = :    :   @-----=-----------+--\n    = *               .      %=  =====+===                  :                             :        #----=----------+=-::\n#    :%                    %@@ =     -=====                 -   :                      :+*       %*---==----------==-:-.";
+
+            #region "Raw" strings
+            const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids\n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to NoSkin mod by Moga, e.g. C:\\cslol-manager\\installed\\riot-skin-disabler-noskin_1521.1.29\n# \nNoSkinPath = ''\n\n# [[Characters]]\n# Name = \"Aurora\"\n# FullyWhitelist = false\n# SkinIds = [ 4, 5, 6, 7, ]\n\n# [[Characters]]\n# Name = \"Viego\"\n# FullyWhitelist = true\n# SkinIds = [ ]\n\n";
+            const string nameArt = 
+@"  _   _      ____  _    _        __        ___     _ _       _ _     _
+ | \ | | ___/ ___|| | _(_)_ __   \ \      / / |__ (_) |_ ___| (_)___| |_ ___ _ __
+ |  \| |/ _ \___ \| |/ / | '_ \   \ \ /\ / /| '_ \| | __/ _ \ | / __| __/ _ \ '__|
+ | |\  | (_) |__) |   <| | | | |   \ V  V / | | | | | ||  __/ | \__ \ ||  __/ |
+ |_| \_|\___/____/|_|\_\_|_| |_|   _\_/\_/  |_| |_|_|\__\___|_|_|___/\__\___|_|
+                          ____          ____
+                         | __ ) _   _  |  _ \ _____   __
+                         |  _ \| | | | | |_) / _ \ \ / /
+                         | |_) | |_| | |  _ <  __/\ V /
+                         |____/ \__, | |_| \_\___| \_/
+                                |___/";
+            const string girlsKissing = 
+@"         -             @#*%                                                                   @:     @@@       @@@      
+        :         .#%***%*@*****@#*@@@@#.                                                   . -    @@@@@@    *@@@*%@@@@ 
+       .      %***+****+*%#**+#**%*************@                                         @@@ : .-  %%@@###%   @@@  @    
+       .  @*@*+*#****##%**#@*######*#####*####***#.                                   @  %  + *- %%@  %##%   @@  @ =**% 
+       .#***#*####*#*#**###****#%****##%##########***                                : :-  :: *-@# :  .##@   #= %- --- .
+**##*#*#*#********#**#*******%#*****#######*#####*%*****                       . =     .%-@@ .@%%@%@:   %@@@+=-=   -- - 
+*##**********#**#*#********#*%*******##*%##########*****                    :=: .:----%----:        ::.@@@ --:=*- ----  
+***********#***#*##*********#***********##%####*#######*                  + *:--------------= -:     @%@@=   -.=* ---:- 
+*******#********#*#***********************##%##*##**#%#*              .: -:----::**-+=---::---=:----@+@@@    :.=+ -:::--
+****#**********#*************#*************##%*##**#*###            *.:-::-::::*-::::+:::::::::+=:+=-:@@@     . =:-:::--
+*##*****************************************#####****#%%#*         ::-:::::::-*:::::-+-::::::::::%%::#@@@     ::-:::::--
+#***********************************************+*####*%%##     -::::-.::::-:*-::::::*::::::::::@@-:-@@@+     :.::::::--
+**********%********************#*#***********+*+**######## *  *=.   -.:::::::-:::::::+:-:::::::@@#:%:@@@=     . .:::-:-:
+*******%**#********************%**%******+***+**##**######@ #=.:  :.:: ::.::-:::::::::=:::::::@@@=::%@@*:     . -:::::-:
+***#**%******+*****************#%%*=*+===+******##*#*####@# =:::=-:.. :-  :+*=::::::::-::::::+@@@-###@@::     ..+:::::-:
+**%***#******++=+**=***********%.*%*:%+=+********#@*#####@#---:-::::::-.. #+*-::::::::::-:::::::@@##@@:::     :.::::-::-
+%@#*****##*#++++**+==*****=*=**@..* *+=******#***#%#*###%%=--::*:::::-::-  :=:::::::::::::::::::::. @%-::     :.::::-:--
+*****@***%***++++*===*++===+===:. --  *.#*****#***#.%####%%+--+-::::::::   ==::   :::::. ::.::: :. =@::-.     :-:::-:-::
+****##**%#***++++*++***+==+=*=*.   =   :.#****#****.=*##%##+--*::::::::    *: .    :: . : :-.   :::*@-.:.    . ::::::-:-
+*******#*#*********************     :    .*********#.*##*=--=.-:::::::     *::::::::::     :::..::-%@:::.    ::::-:::-:-
+*******%*#*******************+        *+:  =*******.*@%%=*--:+:::::::   ::: ::.::::::::::::-.::::-:@@:::     .::-::::---
+##****##******************+++*     *.   -   #*****#*@@%%* #:.*::::::=.:     %::::::::::::-::= :::-+@@+::     ::-:-::-:--
+*****%*******************++++   +      =     -****%@#*#-. %:.=-::::-  -      :::::::::::::::: ::::=@@-::    ::::-:-:-:::
+****#******************+*++=*                +****:+*#  * :*.--::::    .      :-:::::::-:::::: . :+@*::*    -::-:::---::
+**********************++*==*        .. +%@+=   +*#   *#    #..::+::*%%@@%%*: : -.::::::-:::::*  .:%@-+--   :-:--:-:-:-::
+#**#*****##**********+*%==*       .=@%@@      *+@=        -  *=::-+=: **     -#%*::-:::-:::::-    @@:::+   -- -:-:---:--
+##******###*##******+*+==+    :*%#%. -#**    *+*=              -:*=  *       :  -:.=::::::::::  ..@@:-*+  ---.-:-:-:--::
+**#@%-=%#%*#********++%==  .=+.*=+- :.= .   .+                  *:- .           *::.:::::::-::  .@@@+..*  :=:     :.:--:
+@@@:*:-#@:*##******+*%=+:             .   .-            -       :*  .   ..      -:* :::::-:::=:-:@@*.-:: -=-::   ::.::::
+*#%-::#=*+##**##****%=#=#         ..                              :          == +=  ::-::=::-+ -:@@  .-. :-:--: .-:-::::
+*##%:....*#####**@*%*++==                               :                      +   -:*::::-::+::-@%+  . :-----:.:.::-:::
+##%=:.  -*#*#%*@-%#*+++==*                             -                         : -*:-::-::--*-@@:-: : -::---:::  -::::
+#*%@: -  ###%*   :%*+++==*                           # *                          :  :+:: +-=-  : =:: + -=---:---.: ::::
+##@#*@: +#*:      #**=+==.#                          :  *                            +%*+ :++= == ::  -=-:-:----:: :.:::
+#####**%*#:   --   @*++*=- %                         . .                   -          **::*-:*      @* --------::: .::::
+#**####******%* -@  #*+++*  -                       %  *               -=         .=*:----   *   *=. +--=------:- :    :
+%    +%####*#        #*+++     .                         =           :        .*       =       **     =----:---::.:.    
+ #     #%%#%:         **++=      .                       %              .               :      *-=-::-=:=-----:-::::   :
+        ##%.           %**:                             .                                :@+ ..#-++**==-----::-::::::  
+#@    =%+%.             #** :      :##%*-.          .    .           =                           :=+=-*------:-::::::: -
+##   %  *   =            +*+  :   =-------*--  : . .      :                          .          - + =**---------------::
+#   %          :          :*    *---------==.               + .=#%*                      :*    :  *#------=-----------*-
+     +-           :         #  # =-=+***+-==                :    *                    . = :    :   @-----=-----------+--
+    = *               .      %=  =====+===                  :                             :        #----=----------+=-::
+#    :%                    %@@ =     -=====                 -   :                      :+*       %*---==----------==-:-.";
+            #endregion
             
             Console.WriteLine(nameArt);
+            Console.WriteLine();
+            Console.WriteLine("[INF] Starting Professional skin whitelisting software by Rev\u2122");
+            Console.WriteLine();
+            
             #region Process files i.e. config
             var configString = string.Empty;
             var config = new Config();
@@ -29,7 +92,24 @@ namespace SmallWhitelister4Noskin
             if (File.Exists(Config.Path))
             {
                 configString = File.ReadAllText(Config.Path);
-                config = TomletMain.To<Config>(configString);
+                try
+                {
+                    var doc = TomlParser.ParseFile(Config.Path);
+                    if (!doc.Entries.ContainsKey(nameof(Config.Characters)))
+                    {
+                        doc.Entries[nameof(Config.Characters)] = new TomlArray();
+                    }
+                    config = TomletMain.To<Config>(doc);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    Console.WriteLine();
+                    Console.WriteLine("[ERR] Invalid config.toml, please correct errors or delete the file to generate the template and restart the whitelister");
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    return;
+                }
             }
 
             if (File.Exists(Data.Path))
@@ -39,55 +119,77 @@ namespace SmallWhitelister4Noskin
 
             //var arr1 = tomlTemplate.ToCharArray();
             //var arr2 = configString.ToCharArray();
-            //Console.WriteLine("template "+arr1.Length);
-            //Console.WriteLine("config "+arr2.Length);
 
-            if (config.Characters.Length == 0 || configString == tomlTemplate)
+            if (configString == tomlTemplate || string.IsNullOrWhiteSpace(configString))
             {
+                File.WriteAllText(Config.Path, tomlTemplate);
                 Console.WriteLine("[WRN] Please configure your config.toml and restart the whitelister");
+                Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
                 return;
             }
             #endregion
 
             #region Check and set paths
-            if (config.NoskinPath == string.Empty)
+            if (string.IsNullOrWhiteSpace(config.NoSkinPath))
             {
                 GetPath(config);
             }
 
-            if (!Directory.Exists(config.NoskinPath))
+            if (!Directory.Exists(config.NoSkinPath))
             {
                 Console.WriteLine("[ERR] Your NoSkin path does not exist!");
                 GetPath(config);
             }
             
-            var cslolPath = config.NoskinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[0];
+            var cslolPath = config.NoSkinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[0];
             var installedPath = cslolPath + @"\installed";
-            var noskinVer = config.NoskinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[1]
+            var noskinVer = config.NoSkinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[1]
                 .Split(new []{ '_' }, StringSplitOptions.RemoveEmptyEntries);
             var noskinName = noskinVer.Length == 1 ? constNoskinName : $"{constNoskinName}_{noskinVer[1]}";
 
             try
             {
-                if (config.NoskinPath != $@"{installedPath}\{noskinName}")
+                if (config.NoSkinPath != $@"{installedPath}\{noskinName}")
                 {
-                    Directory.Move(config.NoskinPath, $@"{installedPath}\{noskinName}");
+                    Directory.Move(config.NoSkinPath, $@"{installedPath}\{noskinName}");
                 }
             }
             catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
             {
+                Console.WriteLine(ex);
+                Console.WriteLine();
                 Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
                 Environment.Exit(5);
             }
-            config.NoskinPath = $@"{installedPath}\{noskinName}";
+            config.NoSkinPath = $@"{installedPath}\{noskinName}";
             var noskinWorkingPath = $@"{installedPath}\{noskinName}\WAD";
-            
-            File.WriteAllText(Config.Path, TomletMain.TomlStringFrom(config));
+            var document = TomletMain.DocumentFrom(config);
+            if (!((TomlBoolean)document.Entries[nameof(Config.DisplaySecretArt)]).Value)
+            {
+                document.Entries.Remove(nameof(config.DisplaySecretArt));
+            }
+            File.WriteAllText(Config.Path, document.SerializedValue);
             #endregion
 
+            if (config.Characters.Length == 0)
+            {
+                if (data.WhitelistedCharacters.Count == 0)
+                {
+                    Console.WriteLine("[WRN] No characters found for whitelisting, restoring config.toml to template");
+                    File.WriteAllText(Config.Path, CreateTemplateSaveData(config));
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    return;
+                }
+                Console.WriteLine("[WRN] No characters found for whitelisting, restoring NoSkin to default state");
+            }
+            
             #region Restore characters
+            var charStr = string.Join(", ", data.WhitelistedCharacters.Select(character => character.Name));
+            Console.WriteLine($"[INF] Restoring: [{charStr}] from whitelisting");
             var stopwatch = Stopwatch.StartNew();
             var clone = new Character [data.WhitelistedCharacters.Count];
             data.WhitelistedCharacters.CopyTo(clone);
@@ -131,9 +233,28 @@ namespace SmallWhitelister4Noskin
                     RestoreSkins(wlCharacter, noskinWorkingPath, data);
                 }
             }
+
+            if (config.Characters.Length == 0)
+            {
+                Console.WriteLine("[INF] Restoring config to template");
+                File.WriteAllText(Config.Path, CreateTemplateSaveData(config));
+                File.WriteAllText(Data.Path, TomletMain.TomlStringFrom(data));
+
+                Console.WriteLine();
+                Console.WriteLine($"[INF] Finished restoring! Total time: [{stopwatch.Elapsed:mm\\:ss\\.ff}]");
+                if (config.DisplaySecretArt)
+                {
+                    Console.WriteLine(girlsKissing);
+                }
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+                return;
+            }
             #endregion
 
             #region Whitelist characters
+            var wlStr = string.Join(", ", config.Characters.Select(character => character.Name));
+            Console.WriteLine($"[INF] Whitelisting: [{wlStr}]");
             var fullWhitelist = config.Characters.Where(character => character.FullyWhitelist).ToArray();
             var skinsToWhitelist = config.Characters.Except(fullWhitelist);
 
@@ -154,7 +275,10 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
+                        Console.WriteLine(ex);
+                        Console.WriteLine();
                         Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                        Console.WriteLine("Press any key to exit...");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
@@ -167,7 +291,10 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
+                        Console.WriteLine(ex);
+                        Console.WriteLine();
                         Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                        Console.WriteLine("Press any key to exit...");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
@@ -186,7 +313,7 @@ namespace SmallWhitelister4Noskin
                 }
 
                 data.WhitelistedCharacters.Add(character);
-                Console.WriteLine($"[INF] Finished {character.Name}: Time {swInd.Elapsed:mm\\:ss\\.ff}");
+                Console.WriteLine($"[INF] Finished {character.Name}: Time [{swInd.Elapsed:mm\\:ss\\.ff}]");
                 Console.WriteLine();
             }
             #endregion
@@ -250,8 +377,10 @@ namespace SmallWhitelister4Noskin
                         }
                         catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                         {
-                            Console.WriteLine(
-                                "[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                            Console.WriteLine(ex);
+                            Console.WriteLine();
+                            Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                            Console.WriteLine("Press any key to exit...");
                             Console.ReadKey();
                             Environment.Exit(5);
                         }
@@ -285,9 +414,40 @@ namespace SmallWhitelister4Noskin
 
             Console.WriteLine();
             Console.WriteLine($"[INF] Finished Whitelist! Total time: [{stopwatch.Elapsed:mm\\:ss\\.ff}]");
-            //Console.WriteLine(art2);
-            Console.WriteLine($"Press Enter to exit...");
+            if (config.DisplaySecretArt)
+            {
+                Console.WriteLine(girlsKissing);
+            }
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
+        }
+
+        private static string CreateTemplateSaveData(Config config)
+        {
+            var newConfig = Config.Default;
+            newConfig.NoSkinPath = config.NoSkinPath;
+            newConfig.DisplaySecretArt = config.DisplaySecretArt;
+            
+            var document = TomletMain.DocumentFrom(newConfig);
+            if (!((TomlBoolean)document.Entries[nameof(Config.DisplaySecretArt)]).Value)
+            {
+                document.Entries.Remove(nameof(config.DisplaySecretArt));
+            }
+            
+            var configStr = document.SerializedValue;
+            var lines = configStr.Split(new [] { '\n' } , StringSplitOptions.None);
+            for (var i = 0; i < lines.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(lines[i]) || lines[i].StartsWith("#") 
+                                                        || lines[i].StartsWith("NoSkinPath")
+                                                        || lines[i].StartsWith("DisplaySecretArt"))
+                {
+                    continue;
+                }
+                lines[i] = lines[i].Insert(0, "# ");
+            }
+            var finalStr = string.Join("\n", lines);
+            return finalStr;
         }
 
         private static void RestoreSkins(Character wlCharacter, string noskinWorkingPath, Data data)
@@ -319,7 +479,10 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
+                        Console.WriteLine(ex);
+                        Console.WriteLine();
                         Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                        Console.WriteLine("Press any key to exit...");
                         Console.ReadKey();
                         Environment.Exit(5);
                     }
@@ -350,7 +513,10 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
+                    Console.WriteLine(ex);
+                    Console.WriteLine();
                     Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                    Console.WriteLine("Press any key to exit...");
                     Console.ReadKey();
                     Environment.Exit(5);
                 }
@@ -363,7 +529,10 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
+                    Console.WriteLine(ex);
+                    Console.WriteLine();
                     Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
+                    Console.WriteLine("Press any key to exit...");
                     Console.ReadKey();
                     Environment.Exit(5);
                 }
@@ -403,7 +572,7 @@ namespace SmallWhitelister4Noskin
                     }
                     Console.WriteLine('\r');
                 }
-                config.NoskinPath = input;
+                config.NoSkinPath = input;
                 end = true;
             }
 
