@@ -84,7 +84,7 @@ namespace SmallWhitelister4Noskin
             Console.WriteLine("[INF] Starting Professional Skin Whitelisting Software by Rev\u2122");
             Console.WriteLine();
             
-            #region Process files i.e. config
+            #region Process files e.g. config
             var configString = string.Empty;
             var config = new Config();
             var data = new Data();
