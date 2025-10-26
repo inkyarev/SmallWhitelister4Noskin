@@ -81,7 +81,7 @@ namespace SmallWhitelister4Noskin
             
             Console.WriteLine(nameArt);
             Console.WriteLine();
-            Console.WriteLine("[INF] Starting Professional skin whitelisting software by Rev\u2122");
+            Console.WriteLine("[INF] Starting Professional Skin Whitelisting Software by Rev\u2122");
             Console.WriteLine();
             
             #region Process files i.e. config
@@ -103,6 +103,7 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine();
                     Console.WriteLine(e);
                     Console.WriteLine();
                     Console.WriteLine("[ERR] Invalid config.toml, please correct errors or delete the file to generate the template and restart the whitelister");
@@ -157,6 +158,7 @@ namespace SmallWhitelister4Noskin
             }
             catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
             {
+                Console.WriteLine();
                 Console.WriteLine(ex);
                 Console.WriteLine();
                 Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
@@ -192,6 +194,7 @@ namespace SmallWhitelister4Noskin
             {
                 var charStr = string.Join(", ", data.WhitelistedCharacters.Select(character => character.Name));
                 Console.WriteLine($"[INF] Restoring: [{charStr}] from whitelisting");
+                Console.WriteLine();
             }
             var stopwatch = Stopwatch.StartNew();
             var clone = new Character [data.WhitelistedCharacters.Count];
@@ -235,24 +238,28 @@ namespace SmallWhitelister4Noskin
                     }
                     RestoreSkins(wlCharacter, noskinWorkingPath, data);
                 }
-            }
+            } 
+            File.WriteAllText(Data.Path, TomletMain.TomlStringFrom(data));
 
             if (config.Characters.Length == 0)
             {
-                Console.WriteLine("[INF] Restoring config to template");
+                Console.WriteLine("[INF] Restoring config.toml to template");
                 File.WriteAllText(Config.Path, CreateTemplateSaveData(config));
                 File.WriteAllText(Data.Path, TomletMain.TomlStringFrom(data));
-
+                
                 Console.WriteLine();
                 Console.WriteLine($"[INF] Finished restoring! Total time: [{stopwatch.Elapsed:mm\\:ss\\.ff}]");
                 if (config.DisplaySecretArt)
                 {
+                    Console.WriteLine();
                     Console.WriteLine(girlsKissing);
                 }
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
                 return;
             }
+            Console.WriteLine();
+            Console.WriteLine($"[INF] Finished restoring! Total time: [{stopwatch.Elapsed:mm\\:ss\\.ff}]");
             #endregion
 
             #region Whitelist characters
@@ -278,6 +285,7 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
+                        Console.WriteLine();
                         Console.WriteLine(ex);
                         Console.WriteLine();
                         Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
@@ -294,6 +302,7 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
+                        Console.WriteLine();
                         Console.WriteLine(ex);
                         Console.WriteLine();
                         Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
@@ -380,6 +389,7 @@ namespace SmallWhitelister4Noskin
                         }
                         catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                         {
+                            Console.WriteLine();
                             Console.WriteLine(ex);
                             Console.WriteLine();
                             Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
@@ -419,6 +429,7 @@ namespace SmallWhitelister4Noskin
             Console.WriteLine($"[INF] Finished Whitelist! Total time: [{stopwatch.Elapsed:mm\\:ss\\.ff}]");
             if (config.DisplaySecretArt)
             {
+                Console.WriteLine();
                 Console.WriteLine(girlsKissing);
             }
             Console.WriteLine("Press any key to exit...");
@@ -482,6 +493,7 @@ namespace SmallWhitelister4Noskin
                     }
                     catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                     {
+                        Console.WriteLine();
                         Console.WriteLine(ex);
                         Console.WriteLine();
                         Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
@@ -516,6 +528,7 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
+                    Console.WriteLine();
                     Console.WriteLine(ex);
                     Console.WriteLine();
                     Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
@@ -532,6 +545,7 @@ namespace SmallWhitelister4Noskin
                 }
                 catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
                 {
+                    Console.WriteLine();
                     Console.WriteLine(ex);
                     Console.WriteLine();
                     Console.WriteLine("[ERR] CsLoL directory is currently in use by another process and cannot be accessed");
