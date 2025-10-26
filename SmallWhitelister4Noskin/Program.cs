@@ -157,12 +157,14 @@ namespace SmallWhitelister4Noskin
             var noskinVer = config.NoSkinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[1]
                 .Split(new []{ '_' }, StringSplitOptions.RemoveEmptyEntries);
             var noskinName = noskinVer.Length == 1 ? constNoskinName : $"{constNoskinName}_{noskinVer[1]}";
-
+            
+            var isFolderChanged = false;
             try
             {
                 if (config.NoSkinPath != $@"{installedPath}\{noskinName}")
                 {
                     Directory.Move(config.NoSkinPath, $@"{installedPath}\{noskinName}");
+                    isFolderChanged = true;
                 }
             }
             catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
@@ -440,6 +442,11 @@ namespace SmallWhitelister4Noskin
             {
                 Console.WriteLine();
                 Console.WriteLine(girlsKissing);
+            }
+            if (isFolderChanged)
+            {
+                Console.WriteLine();
+                Console.WriteLine("[ALERT] ATTENTION! You need to restart CsLoL Manager! Or else KAPUTT!!");
             }
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
