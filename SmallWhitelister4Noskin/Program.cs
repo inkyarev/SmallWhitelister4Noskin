@@ -18,7 +18,7 @@ namespace SmallWhitelister4Noskin
             const string wadExtractPath = "wad-extract.exe";
 
             #region "Raw" strings
-            const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids\n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to NoSkin mod by Moga, e.g. C:\\cslol-manager\\installed\\riot-skin-disabler-noskin_1521.1.29\n# \nNoSkinPath = ''\n\n# [[Characters]]\n# Name = \"Aurora\"\n# FullyWhitelist = false\n# SkinIds = [ 4, 5, 6, 7, ]\n\n# [[Characters]]\n# Name = \"Viego\"\n# FullyWhitelist = true\n# SkinIds = [ ]\n\n";
+            const string tomlTemplate = "# Refer to https://martynasxs.dev/skindb for skin ids\n# If FullyWhitelist is true SkinIds is ignored\n# \n# Path to NoSkin mod by Moga, e.g. C:\\cslol-manager\\installed\\riot-skin-disabler-noskin\n# \nNoSkinPath = ''\n\n# [[Characters]]\n# Name = \"Aurora\"\n# FullyWhitelist = false\n# SkinIds = [ 4, 5, 6, 7, ]\n\n# [[Characters]]\n# Name = \"Viego\"\n# FullyWhitelist = true\n# SkinIds = [ ]\n\n";
             const string nameArt = 
 @"  _   _      ____  _    _        __        ___     _ _       _ _     _
  | \ | | ___/ ___|| | _(_)_ __   \ \      / / |__ (_) |_ ___| (_)___| |_ ___ _ __
@@ -188,8 +188,11 @@ namespace SmallWhitelister4Noskin
             }
             
             #region Restore characters
-            var charStr = string.Join(", ", data.WhitelistedCharacters.Select(character => character.Name));
-            Console.WriteLine($"[INF] Restoring: [{charStr}] from whitelisting");
+            if (data.WhitelistedCharacters.Count > 0)
+            {
+                var charStr = string.Join(", ", data.WhitelistedCharacters.Select(character => character.Name));
+                Console.WriteLine($"[INF] Restoring: [{charStr}] from whitelisting");
+            }
             var stopwatch = Stopwatch.StartNew();
             var clone = new Character [data.WhitelistedCharacters.Count];
             data.WhitelistedCharacters.CopyTo(clone);
@@ -553,7 +556,7 @@ namespace SmallWhitelister4Noskin
             var end = false;
             while (!end)
             {
-                Console.WriteLine(@"[INF] Paste the full path to NoSkin here and press enter, Ex: C:\mods\cslol\installed\noskin");
+                Console.WriteLine(@"[INF] Paste the full path to NoSkin here and press enter, e.g.: C:\cslol-manager\installed\riot-skin-disabler-noskin");
                 var input = Console.ReadLine();
                 if (input is null || !Directory.Exists(input))
                 {

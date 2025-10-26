@@ -16,7 +16,7 @@ namespace SmallWhitelister4Noskin
         
         [TomlNonSerialized]
         public static string Path { get; set; } = "config.toml";
-        [TomlPrecedingComment("Refer to https://martynasxs.dev/skindb for skin ids\nIf FullyWhitelist is true SkinIds is ignored\n\nPath to NoSkin mod by Moga, e.g. C:\\cslol-manager\\installed\\riot-skin-disabler-noskin_1521.1.29\n")]
+        [TomlPrecedingComment("Refer to https://martynasxs.dev/skindb for skin ids\nIf FullyWhitelist is true SkinIds is ignored\n\nPath to NoSkin mod by Moga, e.g. C:\\cslol-manager\\installed\\riot-skin-disabler-noskin\n")]
         public string NoSkinPath { get; set; } = string.Empty;
         public bool DisplaySecretArt { get; set; }
         public Character[] Characters { get; set; } = Array.Empty<Character>();
