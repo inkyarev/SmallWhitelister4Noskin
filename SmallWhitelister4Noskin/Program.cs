@@ -143,8 +143,17 @@ namespace SmallWhitelister4Noskin
                 GetPath(config);
             }
             
+            var test = $@"{config.NoSkinPath}\WAD".ToLower();
+            var test2 = $@"{config.NoSkinPath}\META".ToLower();
+            if (!Directory.Exists(test) || !Directory.Exists(test2))
+            {
+                Console.WriteLine("[ERR] Your NoSkin path is not a valid mod folder!");
+                GetPath(config);
+            }
+            
             var cslolPath = config.NoSkinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[0];
             var installedPath = cslolPath + @"\installed";
+            
             var noskinVer = config.NoSkinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[1]
                 .Split(new []{ '_' }, StringSplitOptions.RemoveEmptyEntries);
             var noskinName = noskinVer.Length == 1 ? constNoskinName : $"{constNoskinName}_{noskinVer[1]}";
@@ -572,24 +581,22 @@ namespace SmallWhitelister4Noskin
             {
                 Console.WriteLine(@"[INF] Paste the full path to NoSkin here and press enter, e.g.: C:\cslol-manager\installed\riot-skin-disabler-noskin");
                 var input = Console.ReadLine();
+                
                 if (input is null || !Directory.Exists(input))
                 {
                     Console.WriteLine("[ERR] This path does not exist!");
                     continue;
                 }
-
-                if (!input.Contains("noskin"))
+                
+                var test = $@"{input}\WAD".ToLower();
+                var test2 = $@"{input}\META".ToLower();
+                if (!Directory.Exists(test) || !Directory.Exists(test2))
                 {
-                    Console.WriteLine("Are you sure? (Y/N)");
-                    var key = Console.ReadKey();
-                    if (key.Key != ConsoleKey.Y)
-                    {
-                        Console.WriteLine('\r');
-                        continue;
-                    }
-                    Console.WriteLine('\r');
+                    Console.WriteLine("[ERR] This path is not a valid mod folder!");
+                    continue;
                 }
-                config.NoSkinPath = input;
+                
+                config.NoSkinPath = input.TrimEnd('\\');
                 end = true;
             }
 
