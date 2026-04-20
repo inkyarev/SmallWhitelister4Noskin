@@ -1,17 +1,23 @@
 # Professional skin whitelisting software by Rev™
 
 ## Whatawhy
-Automatic whitelisting of skins for [NoSkin Mod](https://runeforge.dev/mods/278e13db-0ecd-46ef-8282-f0f8b07fc08b) (by [Moga](https://runeforge.dev/users/Moga)). Basically his mod turns skins off and my soft can turn them back on automatically (because frequent updates), though you can always do it manually.
+Automatic whitelisting of skins for [NoSkin Mod](https://runeforge.dev/mods/278e13db-0ecd-46ef-8282-f0f8b07fc08b) (by [Moga](https://runeforge.dev/users/Moga)). Basically his mod turns skins off and my soft can turn them back on automatically(because frequent updates), though you can always do it manually.
 
 Made this for myself then sorta remade for the general public for funzies.
 
 ## Usage
 1. Drop NoSkin into CSLoL.
+   
 2. Configure `config.toml`:
-** Enter the *full* unquoted path to your `cslol-manager\installed\NoSkin` inside the single quotes: `NoSkinPath = ''`.
-** Fill out `config.toml` (following the provided template's formatting) with Champion names and Skin IDs for the champs and/or skins you want to see.
-** Double click and run `SmallWhitelister4Noskin.exe`
-** Start CSLoL. **If CSLoL was running while you ran the Whitelister, toggle the start button to refresh your profiles.**
+
+    - Enter the *full* unquoted path to your `cslol-manager\installed\NoSkin` inside the single quotes: `NoSkinPath = ''`.
+
+    - Fill out `config.toml` (following the provided template's formatting) with Champion names and Skin IDs for the champs and/or skins you want to see.
+
+    - Double click and run `SmallWhitelister4Noskin.exe`
+
+    - Start CSLoL. **If CSLoL was running while you ran the Whitelister, toggle the start button to refresh your profiles.**
+
 
 If you update your `config.toml` afterward to add or remove more skins, simply run the Whitelister again and it'll re-enable/disable skins flawlessly.
 
