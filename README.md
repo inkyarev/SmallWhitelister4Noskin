@@ -8,7 +8,7 @@ Made this for myself then sorta remade for the general public for funzies.
 ## Usage
 1. Drop NoSkin into CSLoL.
 2. Configure `config.toml`:
-- Enter the *full* unquoted path to your `cslol-manager\installed\NoSkin` inside the single quotes: `NoSkinPath = ''`.
+- Enter the *full* unquoted path to your `cslol-manager\installed\NoSkin` inside the single quotes: `NoSkinPath = ''`
 - Fill out `config.toml` (following the provided template's formatting) with Champion names and Skin IDs for the champs and/or skins you want to see.
 - Double click and run `SmallWhitelister4Noskin.exe`
 - Start CSLoL. **If CSLoL was running while you ran the Whitelister, toggle the start button to refresh your profiles.**
