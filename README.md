@@ -14,6 +14,7 @@ Made this for myself then sorta remade for the general public for funzies.
 4. Start CSLoL. **If CSLoL's patcher was running while you ran the Whitelister, toggle the start button to refresh your profiles.**
 
 This works with CSLoL-GO as well, but *not* with LTK Manager.
+
 If you update your `config.toml` afterward to add or remove more skins, simply run the Whitelister again and it'll re-enable/disable skins flawlessly.
 
 ## Building From Source
