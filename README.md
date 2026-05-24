@@ -10,7 +10,7 @@ Made this for myself then sorta remade for the general public for funzies.
 2. Configure `config.toml`:
 - Enter the *full* unquoted path to your `cslol-manager\installed\NoSkin` inside the single quotes: `NoSkinPath = ''`.
 - Fill out `config.toml` (following the provided template's formatting) with Champion names and Skin IDs for the champs and/or skins you want to see.
-3. Double click and run `SmallWhitelister4Noskin.exe`
+3. Double click to run `SmallWhitelister4Noskin.exe`
 4. Start CSLoL. **If CSLoL was running while you ran the Whitelister, toggle the start button to refresh your profiles.**
 
 This works with CSLoL-GO as well, but *not* with LTK Manager.
