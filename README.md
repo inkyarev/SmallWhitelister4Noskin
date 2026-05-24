@@ -6,12 +6,12 @@ Automatic whitelisting of skins for [NoSkin Mod](https://runeforge.dev/mods/278e
 Made this for myself then sorta remade for the general public for funzies.
 
 ## Usage
-1. Drop NoSkin into CSLoL.
+1. Stop CSLoL & Drop NoSkin into CSLoL.
 2. Configure `config.toml`:
 - Enter the *full* unquoted path to your `cslol-manager\installed\NoSkin` inside the single quotes: `NoSkinPath = ''`.
 - Fill out `config.toml` (following the provided template's formatting) with Champion names and Skin IDs for the champs and/or skins you want to see.
 3. Double click to run `SmallWhitelister4Noskin.exe`
-4. Start CSLoL. **If CSLoL was running while you ran the Whitelister, toggle the start button to refresh your profiles.**
+4. Start CSLoL. **If CSLoL's patcher was running while you ran the Whitelister, toggle the start button to refresh your profiles.**
 
 This works with CSLoL-GO as well, but *not* with LTK Manager.
 If you update your `config.toml` afterward to add or remove more skins, simply run the Whitelister again and it'll re-enable/disable skins flawlessly.
