@@ -7,13 +7,15 @@ namespace SmallWhitelister4Noskin
     [TomlDoNotInlineObject]
     public class Character
     {
-        public Character(string name = "", bool fullyWhitelist = false, int[] skinIds = null)
+        public Character(string name = "", bool classicOnly = false, bool fullyWhitelist = false, int[] skinIds = null)
         {
             Name = Capitalize(name.ToLower());
+            ClassicOnly = classicOnly;
             FullyWhitelist = fullyWhitelist;
             SkinIds = skinIds ?? Array.Empty<int>();
         }
         public string Name { get; set; }
+        public bool ClassicOnly { get; }
         public bool FullyWhitelist { get; }
         public int[] SkinIds { get; }
 

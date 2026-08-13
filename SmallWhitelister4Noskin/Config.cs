@@ -9,8 +9,8 @@ namespace SmallWhitelister4Noskin
         {
             Characters = new[]
             {
-                new Character("Aurora", false, new []{ 4, 5, 6, 7 }),
-                new Character("Viego", true)
+                new Character("Aurora", false, false, new []{ 4, 5, 6, 7 }),
+                new Character("Viego", false, true)
             }
         };
         
