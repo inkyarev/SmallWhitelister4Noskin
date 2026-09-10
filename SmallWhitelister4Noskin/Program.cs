@@ -152,8 +152,8 @@ namespace SmallWhitelister4Noskin
                 var installedPath = cslolPath + @"\installed";
             
                 var noskinVer = config.NoSkinPath.Split(new[] { @"\installed\" }, StringSplitOptions.None)[1]
-                    .Split(new []{ '_' }, StringSplitOptions.RemoveEmptyEntries);
-                var noskinProperName = noskinVer.Length == 1 ? constNoskinName : $"{constNoskinName}_{noskinVer[1]}";
+                    .Split(new []{ '_' }, StringSplitOptions.RemoveEmptyEntries).Last();
+                var noskinProperName = noskinVer.Length == 1 ? constNoskinName : $"{constNoskinName}_{noskinVer}";
             
                 var isFolderChanged = false;
                 try
@@ -365,9 +365,11 @@ namespace SmallWhitelister4Noskin
                     }
 
                     Console.WriteLine($"[INF] Whitelisting: [{skinStr}] for {character.Name}");
-                    foreach (var characterPath in Directory.GetDirectories(
-                                 $@"{noskinWorkingPath}\{character.Name}.wad\data\characters")
-                                 .Concat(Directory.GetDirectories($@"{noskinWorkingPath}\{character.Name}.wad.client\data\characters")))
+
+                    var directories = Directory.GetDirectories(Directory.Exists($@"{noskinWorkingPath}\{character.Name}.wad\data\characters") ? 
+                        $@"{noskinWorkingPath}\{character.Name}.wad\data\characters" 
+                        : $@"{noskinWorkingPath}\{character.Name}.wad.client\data\characters");
+                    foreach (var characterPath in directories)
                     {
                         var characterName = characterPath.Replace($@"{noskinWorkingPath}\{character.Name}.wad", string.Empty)
                             .Replace(".client", string.Empty).Replace(@"\data\characters\", string.Empty);
