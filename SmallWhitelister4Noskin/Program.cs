@@ -205,10 +205,15 @@ namespace SmallWhitelister4Noskin
                         ReportCsLoLInUse(ex);
                     }
                 }
-
+                
                 foreach (var wadPath in Directory.GetDirectories(noskinWorkingPath, "*.wad")
                              .Concat(Directory.GetDirectories(noskinWorkingPath, "*.wad.client")))
                 {
+                    if (!Directory.Exists($@"{wadPath}\data\characters"))
+                    {
+                        var split = wadPath.Split('\\');
+                        Console.WriteLine($"[WRN] Skipping {split[split.Length - 1]}");
+                    }
                     foreach (var characterPath in Directory.GetDirectories($@"{wadPath}\data\characters"))
                     {
                         foreach (var binPath in Directory.GetFiles($@"{characterPath}\skins", "*.whitelisted"))
