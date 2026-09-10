@@ -213,6 +213,7 @@ namespace SmallWhitelister4Noskin
                     {
                         var split = wadPath.Split('\\');
                         Console.WriteLine($"[WRN] Skipping {split[split.Length - 1]}");
+                        continue;
                     }
                     foreach (var characterPath in Directory.GetDirectories($@"{wadPath}\data\characters"))
                     {
