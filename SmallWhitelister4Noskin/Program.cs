@@ -206,7 +206,8 @@ namespace SmallWhitelister4Noskin
                     }
                 }
 
-                foreach (var wadPath in Directory.GetDirectories(noskinWorkingPath, "*.wad"))
+                foreach (var wadPath in Directory.GetDirectories(noskinWorkingPath, "*.wad")
+                             .Concat(Directory.GetDirectories(noskinWorkingPath, "*.wad.client")))
                 {
                     foreach (var characterPath in Directory.GetDirectories($@"{wadPath}\data\characters"))
                     {
@@ -297,7 +298,18 @@ namespace SmallWhitelister4Noskin
                             ReportCsLoLInUse(ex);
                         }
                     }
-                    else if (File.Exists(wlPath) || Directory.Exists(wlAltPath))
+                    else if (Directory.Exists(path))
+                    {
+                        try
+                        {
+                            Directory.Move(path, $"{path}.whitelisted");
+                        }
+                        catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+                        {
+                            ReportCsLoLInUse(ex);
+                        }
+                    }
+                    else if (File.Exists(wlPath) || Directory.Exists(wlAltPath) || Directory.Exists(wlPath))
                     {
                         Console.WriteLine($"[INF] {character.Name} is already whitelisted");
                         Console.WriteLine();
@@ -339,7 +351,8 @@ namespace SmallWhitelister4Noskin
                         }
                         File.Delete(path);
                     }
-                    else if (!Directory.Exists($@"{noskinWorkingPath}\{character.Name}.wad"))
+                    else if (!Directory.Exists($@"{noskinWorkingPath}\{character.Name}.wad") &&
+                             !Directory.Exists($@"{noskinWorkingPath}\{character.Name}.wad.client"))
                     {
                         Console.WriteLine($"[WRN] Failed to find {character.Name}. Skipping");
                         continue;
@@ -347,9 +360,11 @@ namespace SmallWhitelister4Noskin
 
                     Console.WriteLine($"[INF] Whitelisting: [{skinStr}] for {character.Name}");
                     foreach (var characterPath in Directory.GetDirectories(
-                                 $@"{noskinWorkingPath}\{character.Name}.wad\data\characters"))
+                                 $@"{noskinWorkingPath}\{character.Name}.wad\data\characters")
+                                 .Concat(Directory.GetDirectories($@"{noskinWorkingPath}\{character.Name}.wad.client\data\characters")))
                     {
-                        var characterName = characterPath.Replace($@"{noskinWorkingPath}\{character.Name}.wad\data\characters\", string.Empty);
+                        var characterName = characterPath.Replace($@"{noskinWorkingPath}\{character.Name}.wad", string.Empty)
+                            .Replace(".client", string.Empty).Replace(@"\data\characters\", string.Empty);
                         var awlList = new List<string>();
                         var ftfList = new List<string>();
                         foreach (var skin in character.SkinIds)
